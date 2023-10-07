@@ -28,6 +28,8 @@ import {
 } from "@/components/icons";
 
 import { Logo } from "@/components/icons";
+import { signOut } from "next-auth/react";
+import Logout from "./logout";
 
 export const Navbar = () => {
 	const searchInput = (
@@ -68,6 +70,9 @@ export const Navbar = () => {
 			>
 				<NavbarItem className="sm:flex gap-2">
 					<ThemeSwitch />
+				</NavbarItem>
+				<NavbarItem className="hidden md:flex">
+					<Logout />
 				</NavbarItem>
 			</NavbarContent>
 		</NextUINavbar>
