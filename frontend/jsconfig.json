@@ -1,9 +1,40 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
-  }
+      "compilerOptions": {
+            "baseUrl": "./",
+            "paths": {
+                  "@/auth/*": [
+                        "src/auth/*"
+                  ],
+                  "@/stores/*": [
+                        "src/stores/*"
+                  ],
+                  "@/hooks/*": [
+                        "src/hooks/*"
+                  ],
+                  "@/libs/*": [
+                        "src/libs/*"
+                  ],
+                  "@/configs/*": [
+                        "src/configs/*"
+                  ],
+                  "@/components/*": [
+                        "src/components/*"
+                  ],
+                  "@/history*": [
+                        "src/history"
+                  ],
+                  "@/lodash": [
+                        "src/lodash"
+                  ],
+                  "@/mock-api": [
+                        "src/mock-api"
+                  ],
+                  "@/theme-layouts/*": [
+                        "src/theme-layouts/*"
+                  ],
+                  "app/AppContext": [
+                        "src/app/AppContext"
+                  ]
+            }
+      }
 }

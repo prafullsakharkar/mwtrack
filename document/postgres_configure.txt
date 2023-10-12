@@ -1,0 +1,10 @@
+sudo -u postgres psql
+postgres=# create database <database name>;
+postgres=# create user <user> with encrypted password '******';
+postgres=# grant all privileges on database <database name> to <user>;
+postgres=# ALTER DATABASE mwtrack OWNER TO mwt_user;
+
+
+
+Reference :
+https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e
