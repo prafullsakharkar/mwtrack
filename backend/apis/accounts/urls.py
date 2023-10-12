@@ -1,17 +1,11 @@
-from django.urls import path, re_path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from .views import (
-    CustomProviderAuthView,
-    CustomTokenObtainPairView,
-    CustomTokenRefreshView,
-    CustomTokenVerifyView,
-    LogoutView,
-)
+from .views import UserView
 
-urlpatterns = [
-    re_path(r"^o/(?P<provider>\S+)/$", CustomProviderAuthView.as_view(), name="provider-auth"),
-    path("jwt/create/", CustomTokenObtainPairView.as_view()),
-    path("jwt/refresh/", CustomTokenRefreshView.as_view()),
-    path("jwt/verify/", CustomTokenVerifyView.as_view()),
-    path("logout/", LogoutView.as_view()),
+router = DefaultRouter()
+router.register(r"users", UserView)
+
+account_urls = [
+    path("api/v1/account/", include(router.urls)),
 ]

@@ -38,14 +38,20 @@ class User(AbstractUser):
     )
 
     def __str__(self):
-        return f"{self.username} Profile"
+        return f"{self.email}"
 
     def save(self, *args, **kwargs):
+        if not self.username.startswith("MWT"):
+            if not self.id:
+                self.username = "MWT%0004d" % int(User.objects.count() + 1)
+            else:
+                self.username = "MWT%0004d" % int(self.id)
+
         if not self.first_name:
-            self.first_name = self.username.split(".")[0].title()
-            self.last_name = (
-                self.username.split(".")[1].title() if len(self.username.split(".")) > 1 else ""
-            )
+            email = self.email.split("@")[0]
+            self.first_name = email.split(".")[0].title()
+            self.last_name = email.split(".")[1].title() if len(email.split(".")) > 1 else ""
+
         super().save(*args, **kwargs)
 
         img = Image.open(self.avatar.path)

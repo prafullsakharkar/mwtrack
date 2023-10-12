@@ -103,7 +103,7 @@ else:
             "PASSWORD": os.getenv("DBPASS"),
             "HOST": os.getenv("DBHOST"),
             "PORT": "5432",
-            "OPTIONS": {"sslmode": "require"},
+            # "OPTIONS": {"sslmode": "require"},
         }
     }
 
@@ -156,6 +156,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+DOMAIN = os.getenv("DOMAIN")
+SITE_NAME = "MWTrack"
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
@@ -180,6 +183,7 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.google.GoogleOAuth2",
     "social_core.backends.facebook.FacebookOAuth2",
+    "apis.accounts.middlewares.EmailOrUsernameModelBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
 
@@ -202,7 +206,7 @@ DJOSER = {
     "SET_PASSWORD_RETYPE": True,
     "USER_CREATE_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
-    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "password-reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
