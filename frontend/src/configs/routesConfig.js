@@ -7,8 +7,15 @@ import SignUpConfig from '../app/main/sign-up/SignUpConfig';
 import SignOutConfig from '../app/main/sign-out/SignOutConfig';
 import Error404Page from '../app/main/404/Error404Page';
 import ExampleConfig from '../app/main/example/ExampleConfig';
+import AuthenticationConfigs from '../app/authentications/AuthenticationConfigs';
 
-const routeConfigs = [ExampleConfig, SignOutConfig, SignInConfig, SignUpConfig];
+const routeConfigs = [
+  AuthenticationConfigs,
+  ExampleConfig,
+  SignOutConfig,
+  SignInConfig,
+  SignUpConfig
+];
 
 const routes = [
   ...Utils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),

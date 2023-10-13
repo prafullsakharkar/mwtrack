@@ -13,11 +13,12 @@ import settingsConfig from '@/configs/settingsConfig';
 import withAppProviders from './withAppProviders';
 import { AuthProvider } from '@/auth/AuthContext';
 
-// import axios from 'axios';
+import axios from 'axios';
 /**
  * Axios HTTP Request defaults
  */
-// axios.defaults.baseURL = "";
+axios.defaults.baseURL = `${process.env.REACT_APP_API_HOST}`;
+axios.defaults.withCredentials = true
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 

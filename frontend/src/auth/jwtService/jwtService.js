@@ -1,6 +1,5 @@
 import Utils from '@/libs/Utils';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 import jwtServiceConfig from './jwtServiceConfig';
 
 /* eslint-disable camelcase */
@@ -20,8 +19,7 @@ class JwtService extends Utils.EventEmitter {
         return new Promise((resolve, reject) => {
           if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
             // if you ever get an unauthorized response, logout the user
-            this.emit('onAutoLogout', 'Invalid access_token');
-            this.setSession(null);
+            this.emit('onAutoLogout', 'Invalid token!');
           }
           throw err;
         });
@@ -30,20 +28,10 @@ class JwtService extends Utils.EventEmitter {
   };
 
   handleAuthentication = () => {
-    const access_token = this.getAccessToken();
-
-    if (!access_token) {
-      this.emit('onNoAccessToken');
-
-      return;
-    }
-
-    if (this.isAuthTokenValid(access_token)) {
-      this.setSession(access_token);
+    if (this.verifyToken()) {
       this.emit('onAutoLogin', true);
     } else {
-      this.setSession(null);
-      this.emit('onAutoLogout', 'access_token expired');
+      this.emit('onAutoLogout', 'Token has expired!');
     }
   };
 
@@ -56,98 +44,148 @@ class JwtService extends Utils.EventEmitter {
         })
         .then((response) => {
           if (response.data.access) {
-            this.setSession(response.data.access);
-            this.setRefreshToken(response.data.refresh);
-            const user = this.getUserData(response.data.access)
-            resolve(user);
+            const user = this.getUserData()
             this.emit('onLogin', user);
+            resolve(user);
           } else {
-            reject(response.data.error);
+            reject(new Error('Failed to login with this user.'));
+            console.error(response?.data?.error);
           }
-        });
+        })
+        .catch((response) => {
+          if (response.status == 401) {
+            reject(new Error(response?.data?.detail));
+          } else {
+            reject(new Error('Failed to log in.'));
+          }
+        })
     });
   };
 
   signInWithToken = () => {
     return new Promise((resolve, reject) => {
       axios
-        .post(jwtServiceConfig.refreshToken, {
-          refresh: this.getRefreshToken(),
-        })
+        .post(jwtServiceConfig.refresh)
         .then((response) => {
           if (response.data.access) {
-            this.setSession(response.data.access);
-            const user = this.getUserData(response.data.access)
-            resolve(user);
+            resolve(this.getUserData());
           } else {
-            this.logout();
-            reject(new Error('Failed to login with token.'));
+            reject(new Error('Failed to login with this user.'));
           }
         })
         .catch((error) => {
-          this.logout();
-          reject(new Error('Failed to login with token.'));
+          this.emit('onAutoLogout', 'Token has expired!');
         });
     });
   };
 
-  setSession = (access_token) => {
-    if (access_token) {
-      localStorage.setItem('jwt_access_token', access_token);
-      axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
-    } else {
-      localStorage.removeItem('jwt_access_token');
-      localStorage.removeItem('jwt_refresh_token');
-      delete axios.defaults.headers.common.Authorization;
-    }
+  createUser = (data) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(jwtServiceConfig.register, data)
+        .then((response) => {
+          if (response.data.email) {
+            console.info('Verification mail has been sent to you email id!');
+          }
+        })
+        .catch((error) => {
+          reject(new Error(error?.data?.detail));
+        })
+    });
+  };
+
+  activateUser = (data) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(jwtServiceConfig.activate, data)
+        .then((response) => {
+          console.info('User has been activated successfully!');
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(new Error(error?.data?.detail));
+        })
+    });
+  };
+
+  forgotUserPassword = (data) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(jwtServiceConfig.forgotPassword, data)
+        .then((response) => {
+          console.info('Password reset link sent successfully!');
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(new Error(error?.data?.detail));
+        })
+    });
+  };
+
+  resetUserPassword = (data) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(jwtServiceConfig.resetPassword, data)
+        .then((response) => {
+          console.info('Password reset successfully!');
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(new Error(error?.data?.detail));
+        })
+    });
+  };
+
+  signOut = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(jwtServiceConfig.logout)
+        .catch((error) => {
+          reject(new Error(error?.data?.detail));
+        });
+    });
+  };
+
+  verifyToken = async () => {
+    return await axios
+      .post(jwtServiceConfig.verify)
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        return (error.response.status === 401) ? this.refreshToken() : false;
+      });
+
+  };
+
+  refreshToken = async () => {
+    return await axios
+      .post(jwtServiceConfig.refresh)
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        this.emit('onAutoLogout', 'Token has expired!');
+        console.error("Failed to refresh the token");
+        return false
+      });
+
   };
 
   logout = () => {
-    this.setSession(null);
     this.emit('onLogout', 'Logged out');
   };
 
-  isAuthTokenValid = (access_token) => {
-    if (!access_token) {
-      return false;
-    }
-    const decoded = jwtDecode(access_token);
-    const currentTime = Date.now() / 1000;
-    if (decoded.exp < currentTime) {
-      console.warn('access token expired');
-      return false;
-    }
+  getUserData = async () => {
+    return await axios
+      .get(jwtServiceConfig.me)
+      .then((response) => {
+        return response.data;
+      })
+      .catch(() => {
+        console.error("User not found")
+      });
 
-    return true;
-  };
-
-  getAccessToken = () => {
-    return window.localStorage.getItem('jwt_access_token');
-  };
-
-  setRefreshToken = (refresh_token) => {
-    if (refresh_token) {
-      localStorage.setItem('jwt_refresh_token', refresh_token);
-    } else {
-      localStorage.removeItem('jwt_access_token');
-      localStorage.removeItem('jwt_refresh_token');
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  };
-
-  getRefreshToken = () => {
-    return window.localStorage.getItem('jwt_refresh_token');
-  };
-
-  getUserData = async (access_token) => {
-    const decoded = jwtDecode(access_token);
-    const user_id = decoded.user_id
-    const response = await axios.get(jwtServiceConfig.account + user_id + '/');
-    const data = response.data;
-
-    data.role = (data.role?.name) ? data.role.name.toLowerCase() : 'admin'; // need to changed to artist later
-
-    return data
   };
 }
 

@@ -1,82 +1,69 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@/lodash';
-import history from '@/history';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import FormHelperText from '@mui/material/FormHelperText';
-import jwtService from '@/auth/jwtService';
+import { Link, useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import Logo from '@/components/layout/Logo';
+import { useEffect, useState } from 'react';
+import { showMessage } from '@/stores/core/messageSlice';
+import { useDispatch } from 'react-redux';
+import jwtService from '@/auth/jwtService';
 
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  displayName: yup.string().required('You must enter display name'),
-  email: yup.string().email('You must enter a valid email').required('You must enter a email'),
-  password: yup
+  new_password: yup
     .string()
-    .required('Please enter your password.')
+    .required('Please enter your new_password.')
     .min(8, 'Password is too short - should be 8 chars minimum.'),
-  re_password: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  re_new_password: yup.string().oneOf([yup.ref('new_password'), null], 'Passwords must match'),
 });
 
 const defaultValues = {
-  username: 'AutoGenrated',
-  displayName: '',
-  email: '',
-  password: '',
-  re_password: '',
+  new_password: '',
+  re_new_password: '',
 };
 
-function SignUpPage() {
+function ResetPasswordPage() {
+  const dispatch = useDispatch()
+  const routeParams = useParams();
   const { control, formState, handleSubmit, reset } = useForm({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const { isValid, dirtyFields, errors, setError } = formState;
+  const { isValid, dirtyFields, errors } = formState;
 
-  function onSubmit({ displayName, password, re_password, username, email }) {
-
-    const arrName = displayName.split(" ")
-    const first_name = arrName[0]
-    const last_name = (arrName.length > 1) ? arrName[1] : "";
+  function onSubmit({ new_password, re_new_password }) {
+    routeParams.new_password = new_password
+    routeParams.re_new_password = re_new_password
     jwtService
-      .createUser({
-        username,
-        first_name,
-        last_name,
-        password,
-        re_password,
-        email,
+      .resetUserPassword(routeParams)
+      .then(() => {
+        dispatch(
+          showMessage({
+            message: 'Password has been reset successfully!',
+            variant: 'success'
+          })
+        );
       })
-      .then((user) => {
-        history.push({
-          pathname: '/confirmation-required',
-        });
+      .catch(() => {
+        dispatch(
+          showMessage({
+            message: 'This password link is expired!',
+            variant: 'error'
+          })
+        );
       })
-      .catch((_errors) => {
-        _errors.forEach((error) => {
-          setError(error.type, {
-            type: 'manual',
-            message: error.message,
-          });
-        });
-      });
+    reset(defaultValues);
   }
-
 
   return (
     <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-1 min-w-0">
@@ -133,56 +120,23 @@ function SignUpPage() {
             <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
               <div className="flex justify-center">
                 <Logo />
+
               </div>
-              <h1 className="text-center font-bold leading-9 tracking-tight">
-                Sign up for your account
+              <h1 className="text-center mt-8 font-bold leading-9 tracking-tight">
+                Reset your password
               </h1>
+              <div className="flex justify-center items-baseline mt-2 font-medium">
+                <Typography>Create a new password for your account</Typography>
+              </div>
 
               <form
-                name="registerForm"
+                name="resetPasswordForm"
                 noValidate
                 className="flex flex-col justify-center w-full mt-32"
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <Controller
-                  name="displayName"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      className="mb-24"
-                      label="Display name"
-                      autoFocus
-                      type="name"
-                      error={!!errors.displayName}
-                      helperText={errors?.displayName?.message}
-                      variant="outlined"
-                      required
-                      fullWidth
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      className="mb-24"
-                      label="Email"
-                      type="email"
-                      error={!!errors.email}
-                      helperText={errors?.email?.message}
-                      variant="outlined"
-                      required
-                      fullWidth
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="password"
+                  name="new_password"
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -190,8 +144,8 @@ function SignUpPage() {
                       className="mb-24"
                       label="Password"
                       type="password"
-                      error={!!errors.password}
-                      helperText={errors?.password?.message}
+                      error={!!errors.new_password}
+                      helperText={errors?.new_password?.message}
                       variant="outlined"
                       required
                       fullWidth
@@ -200,7 +154,7 @@ function SignUpPage() {
                 />
 
                 <Controller
-                  name="re_password"
+                  name="re_new_password"
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -208,42 +162,45 @@ function SignUpPage() {
                       className="mb-24"
                       label="Password (Confirm)"
                       type="password"
-                      error={!!errors.re_password}
-                      helperText={errors?.re_password?.message}
+                      error={!!errors.re_new_password}
+                      helperText={errors?.re_new_password?.message}
                       variant="outlined"
                       required
                       fullWidth
                     />
                   )}
                 />
+
                 <Button
                   variant="contained"
                   color="secondary"
-                  className="w-full"
+                  className=" w-full mt-4"
                   aria-label="Register"
                   disabled={_.isEmpty(dirtyFields) || !isValid}
                   type="submit"
                   size="large"
                 >
-                  Create your free account
+                  Reset your password
                 </Button>
-              </form>
-              <div className="flex items-center mt-16">
-                <div className="flex-auto mt-px border-t" />
-                <div className="flex items-baseline mt-2 font-medium">
-                  <Typography>Already have an account?</Typography>
-                  <Link className="ml-4" to="/sign-in">
-                    Sign In
-                  </Link>
+
+                <div className="flex items-center mt-16">
+                  <div className="flex-auto mt-px border-t" />
+                  <div className="flex items-baseline mt-2 font-medium">
+                    <Typography>Return to</Typography>
+                    <Link className="ml-4" to="/sign-in">
+                      Sign In
+                    </Link>
+                  </div>
+                  <div className="flex-auto mt-px border-t" />
                 </div>
-                <div className="flex-auto mt-px border-t" />
-              </div>
+              </form>
             </div>
           </Paper>
         </div>
       </Box>
     </div>
+
   );
 }
 
-export default SignUpPage;
+export default ResetPasswordPage;

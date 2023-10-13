@@ -23,7 +23,7 @@ function AuthProvider({ children }) {
       jwtService
         .signInWithToken()
         .then((user) => {
-          success(user, 'Signed in with JWT');
+          success(user, 'Hi ' + user?.first_name + ', Welcome back!');
         })
         .catch((error) => {
           pass(error.message);
@@ -31,11 +31,18 @@ function AuthProvider({ children }) {
     });
 
     jwtService.on('onLogin', (user) => {
-      success(user, 'Signed in');
+      success(user, 'Hey, You have been signed in!');
     });
 
     jwtService.on('onLogout', () => {
-      pass('Signed out');
+      jwtService
+        .signOut()
+        .then(() => {
+          pass('Signed out successfully!');
+        })
+        .catch((error) => {
+          pass(error.message);
+        });
 
       dispatch(logoutUser());
     });

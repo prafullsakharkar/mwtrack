@@ -12,7 +12,7 @@ export const setUser = createAsyncThunk('user/setUser', async (user, { dispatch,
     You can redirect the logged-in user to a specific route depending on his role
     */
   if (user.loginRedirectUrl) {
-    settingsConfig.loginRedirectUrl = user.loginRedirectUrl; // for example '/apps/academy'
+    settingsConfig.loginRedirectUrl = user.loginRedirectUrl; // for example '/home
   }
 
   return user;
@@ -84,10 +84,13 @@ export const updateUserData = (user) => async (dispatch, getState) => {
 const initialState = {
   role: [], // guest
   data: {
-    displayName: 'John Doe',
-    photoURL: 'assets/images/avatars/brian-hughes.jpg',
-    email: 'johndoe@withinpixels.com',
-    shortcuts: ['apps.calendar', 'apps.mailbox', 'apps.contacts', 'apps.tasks'],
+    "id": 1,
+    "username": "MWT0001",
+    "first_name": "Admin",
+    "last_name": "",
+    "avatar": "http://127.0.0.1:8000/media/defaults/profile_pic.jpg",
+    "role": "admin",
+    "email": "admin@example.com",
   },
 };
 
@@ -97,10 +100,12 @@ const userSlice = createSlice({
   reducers: {
     userLoggedOut: (state, action) => initialState,
   },
-  extraReducers: {
-    [updateUserSettings.fulfilled]: (state, action) => action.payload,
-    [updateUserShortcuts.fulfilled]: (state, action) => action.payload,
-    [setUser.fulfilled]: (state, action) => action.payload,
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateUserSettings.fulfilled, (state, action) => action.payload)
+      .addCase(updateUserShortcuts.fulfilled, (state, action) => action.payload)
+      // You can chain calls, or have separate `builder.addCase()` lines each time
+      .addCase(setUser.fulfilled, (state, action) => action.payload)
   },
 });
 

@@ -1,11 +1,12 @@
 import { memo } from 'react';
 import Box from '@mui/material/Box';
+import Logo from '@/components/layout/Logo';
 
 function SplashScreen() {
   return (
     <div id="core-splash-screen">
       <div className="logo">
-        <img width="128" src="assets/images/logo/logo.svg" alt="logo" />
+        <Logo />
       </div>
       <Box
         id="spinner"

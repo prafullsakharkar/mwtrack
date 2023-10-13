@@ -1,20 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@/lodash';
-import history from '@/history';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import FormHelperText from '@mui/material/FormHelperText';
 import jwtService from '@/auth/jwtService';
 import Logo from '@/components/layout/Logo';
 
@@ -28,15 +21,16 @@ const schema = yup.object().shape({
     .string()
     .required('Please enter your password.')
     .min(8, 'Password is too short - should be 8 chars minimum.'),
-  re_password: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  acceptTermsConditions: yup.boolean().oneOf([true], 'The terms and conditions must be accepted.'),
 });
 
 const defaultValues = {
-  username: 'AutoGenrated',
   displayName: '',
   email: '',
   password: '',
-  re_password: '',
+  passwordConfirm: '',
+  acceptTermsConditions: false,
 };
 
 function SignUpPage() {
@@ -48,24 +42,15 @@ function SignUpPage() {
 
   const { isValid, dirtyFields, errors, setError } = formState;
 
-  function onSubmit({ displayName, password, re_password, username, email }) {
-
-    const arrName = displayName.split(" ")
-    const first_name = arrName[0]
-    const last_name = (arrName.length > 1) ? arrName[1] : "";
+  function onSubmit({ displayName, password, email }) {
     jwtService
       .createUser({
-        username,
-        first_name,
-        last_name,
+        displayName,
         password,
-        re_password,
         email,
       })
       .then((user) => {
-        history.push({
-          pathname: '/confirmation-required',
-        });
+        // No need to do anything, registered user data will be set at app/auth/AuthContext
       })
       .catch((_errors) => {
         _errors.forEach((error) => {
@@ -134,14 +119,14 @@ function SignUpPage() {
               <div className="flex justify-center">
                 <Logo />
               </div>
-              <h1 className="text-center font-bold leading-9 tracking-tight">
+              <h1 className="text-center mt-8 font-bold leading-9 tracking-tight">
                 Sign up for your account
               </h1>
 
               <form
                 name="registerForm"
                 noValidate
-                className="flex flex-col justify-center w-full mt-32"
+                className="flex flex-col justify-center w-full mt-16"
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <Controller
@@ -200,7 +185,7 @@ function SignUpPage() {
                 />
 
                 <Controller
-                  name="re_password"
+                  name="passwordConfirm"
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -208,8 +193,8 @@ function SignUpPage() {
                       className="mb-24"
                       label="Password (Confirm)"
                       type="password"
-                      error={!!errors.re_password}
-                      helperText={errors?.re_password?.message}
+                      error={!!errors.passwordConfirm}
+                      helperText={errors?.passwordConfirm?.message}
                       variant="outlined"
                       required
                       fullWidth
@@ -232,7 +217,7 @@ function SignUpPage() {
                 <div className="flex-auto mt-px border-t" />
                 <div className="flex items-baseline mt-2 font-medium">
                   <Typography>Already have an account?</Typography>
-                  <Link className="ml-4" to="/sign-in">
+                  <Link className="ml-4" to="/login">
                     Sign In
                   </Link>
                 </div>

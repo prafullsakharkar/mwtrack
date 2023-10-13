@@ -100,16 +100,17 @@ const settingsSlice = createSlice({
       };
     },
   },
-  extraReducers: {
-    [setDefaultSettings.fulfilled]: (state, action) => action.payload,
-    [setUser.fulfilled]: (state, action) => {
-      const defaults = generateSettings(state.defaults, action.payload?.data?.settings);
-      return {
-        ...state,
-        defaults: _.merge({}, defaults),
-        current: _.merge({}, defaults),
-      };
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(setDefaultSettings.fulfilled, (state, action) => action.payload)
+      .addCase(setUser.fulfilled, (state, action) => {
+        const defaults = generateSettings(state.defaults, action.payload?.data?.settings);
+        return {
+          ...state,
+          defaults: _.merge({}, defaults),
+          current: _.merge({}, defaults),
+        };
+      })
   },
 });
 
