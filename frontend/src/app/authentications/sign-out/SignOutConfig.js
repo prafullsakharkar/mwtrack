@@ -1,7 +1,6 @@
-import SignInPage from './SignInPage';
-import authRoles from '@/auth/authRoles';
+import SignOut from './SignOut';
 
-const SignInConfig = {
+const SignOutConfig = {
   settings: {
     layout: {
       config: {
@@ -23,13 +22,13 @@ const SignInConfig = {
       },
     },
   },
-  auth: authRoles.onlyGuest,
+  auth: null,
   routes: [
     {
-      path: 'sign-in',
-      element: <SignInPage />,
+      path: 'sign-out',
+      element: <SignOut />,
     },
   ],
 };
 
-export default SignInConfig;
+export default SignOutConfig;

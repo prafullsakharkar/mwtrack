@@ -11,10 +11,13 @@ import FullScreenToggle from '@/components/layout/FullScreenToggle';
 import NavbarToggleButton from '@/components/layout/NavbarToggleButton';
 import UserMenu from '@/components/layout/UserMenu';
 import NavbarWrapperLayout from './NavbarWrapperLayout';
+import Logo from '@/components/layout/Logo';
+import { selectUser } from '@/stores/userSlice';
 
 function ToolbarLayout(props) {
   const config = useSelector(selectCurrentLayoutConfig);
   const toolbarTheme = useSelector(selectToolbarTheme);
+  const user = useSelector(selectUser);
 
   return (
     <ThemeProvider theme={toolbarTheme}>
@@ -25,14 +28,18 @@ function ToolbarLayout(props) {
         style={{ backgroundColor: toolbarTheme.palette.background.default }}
       >
         <Toolbar className="container p-0 lg:px-24 min-h-56">
-          {config.navbar.display && (
+          <div className="flex shrink-0 items-center px-8">
+            <Logo />
+          </div>
+
+          {config.navbar.display && user?.email && (
             <Hidden lgUp>
               <NavbarToggleButton className="w-40 h-40 p-0 mx-0 sm:mx-8" />
             </Hidden>
           )}
 
           <div className="flex flex-1">
-            {config.navbar.display && (
+            {config.navbar.display && user?.email && (
               <NavbarWrapperLayout
                 className={clsx(config.navbar.style === 'fixed' && 'sticky top-0 z-50')}
               />

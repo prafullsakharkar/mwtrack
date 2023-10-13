@@ -19,7 +19,7 @@ class JwtService extends Utils.EventEmitter {
         return new Promise((resolve, reject) => {
           if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
             // if you ever get an unauthorized response, logout the user
-            this.emit('onAutoLogout', 'Invalid token!');
+            this.emit('onAutoLogout', 'Invalid or expired token!');
           }
           throw err;
         });
@@ -48,16 +48,14 @@ class JwtService extends Utils.EventEmitter {
             this.emit('onLogin', user);
             resolve(user);
           } else {
-            reject(new Error('Failed to login with this user.'));
-            console.error(response?.data?.error);
+            this.emit('onAutoLogout', 'Unable to retrive token!');
           }
         })
-        .catch((response) => {
-          if (response.status == 401) {
-            reject(new Error(response?.data?.detail));
-          } else {
-            reject(new Error('Failed to log in.'));
+        .catch((error) => {
+          if (error.response.status === 401) {
+            this.emit('onAutoLogout', 'Unauthorized: Invalid email or password!');
           }
+          reject(error.response);
         })
     });
   };
@@ -70,11 +68,12 @@ class JwtService extends Utils.EventEmitter {
           if (response.data.access) {
             resolve(this.getUserData());
           } else {
-            reject(new Error('Failed to login with this user.'));
+            this.emit('onAutoLogout', 'Failed to login with this user!');
           }
         })
         .catch((error) => {
-          this.emit('onAutoLogout', 'Token has expired!');
+          // this.emit('onAutoLogout', 'Token has expired!');
+          reject(error.response)
         });
     });
   };
@@ -86,10 +85,11 @@ class JwtService extends Utils.EventEmitter {
         .then((response) => {
           if (response.data.email) {
             console.info('Verification mail has been sent to you email id!');
+            resolve(response.data)
           }
         })
         .catch((error) => {
-          reject(new Error(error?.data?.detail));
+          reject(error.response);
         })
     });
   };
@@ -103,7 +103,7 @@ class JwtService extends Utils.EventEmitter {
           resolve(response)
         })
         .catch((error) => {
-          reject(new Error(error?.data?.detail));
+          reject(error.response);
         })
     });
   };
@@ -117,7 +117,7 @@ class JwtService extends Utils.EventEmitter {
           resolve(response)
         })
         .catch((error) => {
-          reject(new Error(error?.data?.detail));
+          reject(error.response);
         })
     });
   };
@@ -131,7 +131,7 @@ class JwtService extends Utils.EventEmitter {
           resolve(response)
         })
         .catch((error) => {
-          reject(new Error(error?.data?.detail));
+          reject(error.response);
         })
     });
   };
@@ -141,7 +141,7 @@ class JwtService extends Utils.EventEmitter {
       axios
         .post(jwtServiceConfig.logout)
         .catch((error) => {
-          reject(new Error(error?.data?.detail));
+          reject(error.response);
         });
     });
   };
@@ -165,7 +165,6 @@ class JwtService extends Utils.EventEmitter {
         return true;
       })
       .catch(() => {
-        this.emit('onAutoLogout', 'Token has expired!');
         console.error("Failed to refresh the token");
         return false
       });

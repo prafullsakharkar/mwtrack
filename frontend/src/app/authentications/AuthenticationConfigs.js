@@ -1,8 +1,6 @@
 import { lazy } from 'react';
-import { Navigate } from 'react-router-dom';
 
 const SignIn = lazy(() => import('./SignIn'));
-const SignOut = lazy(() => import('./SignOut'));
 const SignUp = lazy(() => import('./SignUp'));
 const ForgotPassword = lazy(() => import('./ForgotPassword'));
 const ResetPassword = lazy(() => import('./ResetPassword'));
@@ -35,18 +33,14 @@ const AuthenticationConfigs = {
   },
   auth: authRoles.onlyGuest,
   routes: [
-    // {
-    //   path: 'sign-in',
-    //   element: <SignIn />,
-    // },
-    // {
-    //   path: 'sign-out',
-    //   element: <SignOut />,
-    // },
-    // {
-    //   path: 'sign-up',
-    //   element: <SignUp />,
-    // },
+    {
+      path: 'sign-in',
+      element: <SignIn />,
+    },
+    {
+      path: 'sign-up',
+      element: <SignUp />,
+    },
     {
       path: 'forgot-password',
       element: <ForgotPassword />,

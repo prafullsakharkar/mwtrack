@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@/lodash';
+import history from '@/history';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import jwtService from '@/auth/jwtService';
@@ -21,43 +22,50 @@ const schema = yup.object().shape({
     .string()
     .required('Please enter your password.')
     .min(8, 'Password is too short - should be 8 chars minimum.'),
-  passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-  acceptTermsConditions: yup.boolean().oneOf([true], 'The terms and conditions must be accepted.'),
+  re_password: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
 });
 
 const defaultValues = {
+  username: 'AutoGenrated',
   displayName: '',
   email: '',
   password: '',
-  passwordConfirm: '',
-  acceptTermsConditions: false,
+  re_password: '',
 };
 
 function SignUpPage() {
-  const { control, formState, handleSubmit, reset } = useForm({
+  const { control, formState, handleSubmit, reset, setError } = useForm({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const { isValid, dirtyFields, errors, setError } = formState;
+  const { isValid, dirtyFields, errors } = formState;
 
-  function onSubmit({ displayName, password, email }) {
+  function onSubmit({ displayName, password, re_password, username, email }) {
+
+    const arrName = displayName.split(" ")
+    const first_name = arrName[0]
+    const last_name = (arrName.length > 1) ? arrName[1] : "";
     jwtService
       .createUser({
-        displayName,
+        username,
+        first_name,
+        last_name,
         password,
+        re_password,
         email,
       })
       .then((user) => {
-        // No need to do anything, registered user data will be set at app/auth/AuthContext
+        history.push({
+          pathname: '/confirmation-required',
+        });
       })
-      .catch((_errors) => {
-        _errors.forEach((error) => {
-          setError(error.type, {
-            type: 'manual',
-            message: error.message,
-          });
+      .catch((error) => {
+        console.log(error)
+        setError("email", {
+          type: 'manual',
+          message: error.data.email,
         });
       });
   }
@@ -119,14 +127,14 @@ function SignUpPage() {
               <div className="flex justify-center">
                 <Logo />
               </div>
-              <h1 className="text-center mt-8 font-bold leading-9 tracking-tight">
+              <h1 className="text-center font-bold leading-9 tracking-tight">
                 Sign up for your account
               </h1>
 
               <form
                 name="registerForm"
                 noValidate
-                className="flex flex-col justify-center w-full mt-16"
+                className="flex flex-col justify-center w-full mt-32"
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <Controller
@@ -185,7 +193,7 @@ function SignUpPage() {
                 />
 
                 <Controller
-                  name="passwordConfirm"
+                  name="re_password"
                   control={control}
                   render={({ field }) => (
                     <TextField
@@ -193,8 +201,8 @@ function SignUpPage() {
                       className="mb-24"
                       label="Password (Confirm)"
                       type="password"
-                      error={!!errors.passwordConfirm}
-                      helperText={errors?.passwordConfirm?.message}
+                      error={!!errors.re_password}
+                      helperText={errors?.re_password?.message}
                       variant="outlined"
                       required
                       fullWidth
@@ -217,7 +225,7 @@ function SignUpPage() {
                 <div className="flex-auto mt-px border-t" />
                 <div className="flex items-baseline mt-2 font-medium">
                   <Typography>Already have an account?</Typography>
-                  <Link className="ml-4" to="/login">
+                  <Link className="ml-4" to="/sign-in">
                     Sign In
                   </Link>
                 </div>

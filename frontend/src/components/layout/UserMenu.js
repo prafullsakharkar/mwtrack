@@ -15,6 +15,7 @@ function UserMenu(props) {
   const user = useSelector(selectUser);
   const [userMenu, setUserMenu] = useState(null);
 
+  console.log(user)
   const userMenuClick = (event) => {
     setUserMenu(event.currentTarget);
   };
@@ -35,7 +36,7 @@ function UserMenu(props) {
             {user?.first_name} {user?.last_name}
           </Typography>
           <Typography className="text-11 font-medium capitalize" color="text.secondary">
-            {user?.role} | {user?.username}
+            {user?.role && user?.role + " | " + user?.username}
           </Typography>
         </div>
 

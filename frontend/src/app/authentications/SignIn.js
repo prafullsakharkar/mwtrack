@@ -19,7 +19,8 @@ import Logo from '@/components/layout/Logo';
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  email: yup.string().email('You must enter a valid email').required('You must enter a email'),
+  email: yup.string().required('You must enter a email'),
+  // email: yup.string().email('You must enter a valid email').required('You must enter a email'),
   password: yup
     .string()
     .required('Please enter your password.')
@@ -41,24 +42,14 @@ function SignInPage() {
 
   const { isValid, dirtyFields, errors } = formState;
 
-  useEffect(() => {
-    setValue('email', 'admin@example.com', { shouldDirty: true, shouldValidate: true });
-    setValue('password', 'admin@123', { shouldDirty: true, shouldValidate: true });
-  }, [setValue]);
-
   function onSubmit({ email, password }) {
     jwtService
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         // No need to do anything, user data will be set at app/auth/AuthContext
       })
-      .catch((_errors) => {
-        _errors.forEach((error) => {
-          setError(error.type, {
-            type: 'manual',
-            message: error.message,
-          });
-        });
+      .catch((error) => {
+        console.log(error)
       });
   }
 
@@ -137,7 +128,7 @@ function SignInPage() {
                     <TextField
                       {...field}
                       className="mb-24"
-                      label="Email"
+                      label="Email or Username"
                       autoFocus
                       type="email"
                       error={!!errors.email}
@@ -202,7 +193,7 @@ function SignInPage() {
                   <div className="flex-auto mt-px border-t" />
                   <div className="flex items-baseline mt-2 font-medium">
                     <Typography>Don't have an account?</Typography>
-                    <Link className="ml-4" to="/register">
+                    <Link className="ml-4" to="/sign-up">
                       Sign up
                     </Link>
                   </div>

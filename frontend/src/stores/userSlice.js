@@ -81,18 +81,7 @@ export const updateUserData = (user) => async (dispatch, getState) => {
     });
 };
 
-const initialState = {
-  role: [], // guest
-  data: {
-    "id": 1,
-    "username": "MWT0001",
-    "first_name": "Admin",
-    "last_name": "",
-    "avatar": "http://127.0.0.1:8000/media/defaults/profile_pic.jpg",
-    "role": "admin",
-    "email": "admin@example.com",
-  },
-};
+const initialState = {};
 
 const userSlice = createSlice({
   name: 'user',
