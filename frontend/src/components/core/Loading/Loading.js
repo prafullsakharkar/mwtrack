@@ -20,7 +20,7 @@ function Loading(props) {
       )}
     >
       <Typography className="text-13 sm:text-20 font-medium -mb-16" color="text.secondary">
-        Loading
+        Loading...
       </Typography>
       <Box
         id="spinner"

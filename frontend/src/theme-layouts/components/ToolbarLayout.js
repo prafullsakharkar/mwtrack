@@ -28,9 +28,11 @@ function ToolbarLayout(props) {
         style={{ backgroundColor: toolbarTheme.palette.background.default }}
       >
         <Toolbar className="container p-0 lg:px-24 min-h-56">
-          <div className="flex shrink-0 items-center px-8">
-            <Logo />
-          </div>
+          <Hidden lgDown>
+            <div className="flex shrink-0 items-center px-8">
+              <Logo />
+            </div>
+          </Hidden>
 
           {config.navbar.display && user?.email && (
             <Hidden lgUp>

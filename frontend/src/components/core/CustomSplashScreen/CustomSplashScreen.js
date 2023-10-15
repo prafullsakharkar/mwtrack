@@ -4,7 +4,7 @@ import Logo from '@/components/layout/Logo';
 
 function SplashScreen() {
   return (
-    <div id="core-splash-screen">
+    <div id="splash-screen">
       <div className="logo">
         <Logo />
       </div>

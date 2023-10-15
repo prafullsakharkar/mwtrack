@@ -15,7 +15,6 @@ function UserMenu(props) {
   const user = useSelector(selectUser);
   const [userMenu, setUserMenu] = useState(null);
 
-  console.log(user)
   const userMenuClick = (event) => {
     setUserMenu(event.currentTarget);
   };
@@ -80,17 +79,11 @@ function UserMenu(props) {
           </>
         ) : (
           <>
-            <MenuItem component={Link} to="/apps/profile" onClick={userMenuClose} role="button">
+            <MenuItem component={Link} to="/accounts/profile" onClick={userMenuClose} role="button">
               <ListItemIcon className="min-w-40">
                 <SvgIcon>heroicons-outline:user-circle</SvgIcon>
               </ListItemIcon>
               <ListItemText primary="My Profile" />
-            </MenuItem>
-            <MenuItem component={Link} to="/apps/mailbox" onClick={userMenuClose} role="button">
-              <ListItemIcon className="min-w-40">
-                <SvgIcon>heroicons-outline:mail-open</SvgIcon>
-              </ListItemIcon>
-              <ListItemText primary="Inbox" />
             </MenuItem>
             <MenuItem
               component={NavLink}

@@ -5,6 +5,7 @@ import CustomSplashScreen from '@/components/core/CustomSplashScreen';
 import { showMessage } from '@/stores/core/messageSlice';
 import { logoutUser, setUser } from '@/stores/userSlice';
 import jwtService from './jwtService';
+import Logo from '@/components/layout/Logo';
 
 const AuthContext = React.createContext();
 

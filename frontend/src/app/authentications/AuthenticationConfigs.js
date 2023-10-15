@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 
 const SignIn = lazy(() => import('./SignIn'));
+const SignOut = lazy(() => import('./SignOut'));
 const SignUp = lazy(() => import('./SignUp'));
 const ForgotPassword = lazy(() => import('./ForgotPassword'));
 const ResetPassword = lazy(() => import('./ResetPassword'));
@@ -36,6 +37,11 @@ const AuthenticationConfigs = {
     {
       path: 'sign-in',
       element: <SignIn />,
+    },
+    {
+      path: 'sign-out',
+      element: <SignOut />,
+      auth: null,
     },
     {
       path: 'sign-up',
