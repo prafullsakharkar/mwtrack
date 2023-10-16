@@ -4,7 +4,7 @@ const navigationConfig = [
     title: 'Accounts',
     subtitle: 'Accounts information',
     type: 'group',
-    icon: 'heroicons-outline:home',
+    icon: 'heroicons-outline:users',
     translate: 'ACCOUNTS',
     children: [
       {
@@ -18,7 +18,7 @@ const navigationConfig = [
         id: 'accounts.groups',
         title: 'Groups',
         type: 'item',
-        icon: 'heroicons-outline:user',
+        icon: 'heroicons-outline:user-group',
         url: '/accounts/groups',
       },
     ],

@@ -1,0 +1,12 @@
+# Build and run Dockerfile
+docker build --tag python-django .
+docker run --publish 8000:8000 python-django
+
+# Build and run docker-compose.yaml file
+docker-compose build
+docker-compose run --rm app django-admin startproject core .
+docker-compose up
+
+# For alpine docker image hash prompt
+docker ps
+docker exec -it django_container sh 

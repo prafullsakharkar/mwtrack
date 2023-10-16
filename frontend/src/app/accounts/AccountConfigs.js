@@ -1,11 +1,12 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
-import User from './users/User';
-import UserForm from './users/UserForm';
+// import User from './users/User';
+// import UserForm from './users/UserForm';
 import authRoles from '@/auth/authRoles';
 
-// const Course = lazy(() => import('./course/Course'));
-// const Courses = lazy(() => import('./courses/Courses'));
+const User = lazy(() => import('./users/User'));
+const UserForm = lazy(() => import('./users/UserForm'));
+const Group = lazy(() => import('./groups/Group'));
 
 const AccountConfigs = {
   settings: {
@@ -30,6 +31,10 @@ const AccountConfigs = {
           element: <UserForm />,
         },
       ],
+    },
+    {
+      path: 'accounts/groups',
+      element: <Group />,
     },
   ]
 };

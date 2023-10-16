@@ -17,8 +17,6 @@ if os.path.isfile(dotenv_file):
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
@@ -81,32 +79,17 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if DEVELOPMENT_MODE is True:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DBNAME"),
+        "USER": os.getenv("DBUSER"),
+        "PASSWORD": os.getenv("DBPASS"),
+        "HOST": os.getenv("DBHOST"),
+        "PORT": "5432",
+        # "OPTIONS": {"sslmode": "require"},
     }
-else:
-    # if os.getenv("DATABASE_URL", None) is None:
-    #     raise Exception("DATABASE_URL environment variable not defined")
-    # DATABASES = {
-    #     "default": dj_database_url.parse(os.getenv("DATABASE_URL")),
-    # }
-
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DBNAME"),
-            "USER": os.getenv("DBUSER"),
-            "PASSWORD": os.getenv("DBPASS"),
-            "HOST": os.getenv("DBHOST"),
-            "PORT": "5432",
-            # "OPTIONS": {"sslmode": "require"},
-        }
-    }
-
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

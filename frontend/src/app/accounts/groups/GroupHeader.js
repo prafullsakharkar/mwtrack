@@ -5,8 +5,11 @@ import { Link } from 'react-router-dom'
 import history from '@/history';
 import SvgIcon from '@/components/core/SvgIcon';
 import NavLinkAdapter from '@/components/core/NavLinkAdapter';
+import { useDispatch } from 'react-redux';
+import { openNewGroupDialog } from './store/groupSlice';
 
-const UserHeader = () => {
+const GroupHeader = () => {
+    const dispatch = useDispatch();
     const { pathname } = history.location;
     return (
         <div className="flex items-center justify-center py-8 px-4 md:px-8 h-full w-full">
@@ -23,15 +26,17 @@ const UserHeader = () => {
                         className="text-24 font-bold tracking-tight leading-none"
                         role="button"
                     >
-                        Users
+                        Groups
                     </Typography>
                 </motion.span>
                 <Button
                     className="mx-8"
                     variant="contained"
                     color="secondary"
-                    component={NavLinkAdapter}
-                    to="new/edit"
+                    onClick={(ev) => {
+                        ev.stopPropagation();
+                        dispatch(openNewGroupDialog());
+                    }}
                 >
                     <SvgIcon size={20}>heroicons-outline:plus</SvgIcon>
                     <span className="mx-8">Create</span>
@@ -41,4 +46,4 @@ const UserHeader = () => {
     )
 }
 
-export default UserHeader
+export default GroupHeader

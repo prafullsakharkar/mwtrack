@@ -1,31 +1,16 @@
-import { motion } from 'framer-motion';
-import NavLinkAdapter from '@/components/core/NavLinkAdapter';
-import MaterialReactTable from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { Box, IconButton, Button } from '@mui/material';
+
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Icon from '@mui/material/Icon';
 import format from 'date-fns/format';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUsers } from './store/userSlice';
-import SvgIcon from '@/components/core/SvgIcon';
+import MuiTable from '@/components/core/MuiTable';
+import { Typography } from '@mui/material';
 
-function UsersList(props) {
-	const dispatch = useDispatch();
-	const routeParams = useParams();
-	const data = useSelector(selectUsers);
+function UserList(props) {
+	const data = useSelector(selectUsers) || [];
 	const isLoading = useSelector(({ userApp }) => userApp.users.isLoading);
-
-	if (!data) {
-		return (
-			<div className="flex flex-1 items-center justify-center h-full">
-				<Typography color="text.secondary" variant="h5">
-					There are no contacts!
-				</Typography>
-			</div>
-		)
-	}
 
 	const columns = React.useMemo(
 		() => [
@@ -96,55 +81,23 @@ function UsersList(props) {
 		[]
 	);
 
+	if (data.length == 0) {
+		return (
+			<div className="flex flex-1 items-center justify-center h-full">
+				<Typography color="text.secondary" variant="h5">
+					There are no users!
+				</Typography>
+			</div>
+		)
+	}
+
 	return (
-		<motion.div
-			initial={{ y: 20, opacity: 0 }}
-			animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
-			className="flex flex-col flex-auto w-full max-h-full"
-		>
-			<MaterialReactTable
-				columns={columns}
-				data={data}
-				enableFullScreenToggle={false}
-				enableColumnResizing
-				enableColumnOrdering
-				enablePinning
-				enableColumnDragging={false}
-				enableRowSelection
-				enableRowActions
-				enableStickyHeader
-				muiTableContainerProps={{ sx: { maxHeight: '490px', } }}
-				state={{ isLoading: isLoading, showSkeletons: isLoading }}
-				displayColumnDefOptions={{
-					'mrt-row-actions': {
-						header: 'Actions', //change header text
-						size: 70, //make actions column wider
-					},
-				}}
-				renderRowActions={({ row, table }) => (
-					<Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-						<IconButton
-							variant="contained"
-							color="secondary"
-							component={NavLinkAdapter}
-							to={row.original.id + "/edit"}
-						>
-							<SvgIcon size={20}>heroicons-outline:pencil-alt</SvgIcon>
-						</IconButton>
-						{/* <IconButton
-							variant="contained"
-							color="secondary"
-							component={NavLinkAdapter}
-							to={row.original.id + "/password/change"}
-						>
-							<SvgIcon size={20}>heroicons-outline:key</SvgIcon>
-						</IconButton> */}
-					</Box>
-				)}
-				positionToolbarAlertBanner="bottom" //show selected rows count on bottom toolbar
-			/>
-		</motion.div>
+		<MuiTable
+			isLoading={isLoading}
+			data={data}
+			columns={columns}
+		/>
 	);
 }
 
-export default UsersList;
+export default UserList;

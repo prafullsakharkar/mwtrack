@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: backend
+    volumes:
+      - static:/static
+    env_file:
+      - backend/.env
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+  
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    volumes:
+      - frontend:/app/build
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    volumes:
+      - static:/static
+      - frontend:/var/www/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  static:
+  frontend:
