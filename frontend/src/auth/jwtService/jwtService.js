@@ -52,10 +52,11 @@ class JwtService extends Utils.EventEmitter {
           }
         })
         .catch((error) => {
-          if (error.response.status === 401) {
+          if (error?.response?.status === 401) {
             this.emit('onAutoLogout', 'Unauthorized: Invalid email or password!');
           }
-          reject(error.response);
+          this.emit('onAutoLogout', 'Failed to login: somthing went wrong!');
+          reject(error?.response);
         })
     });
   };
@@ -73,7 +74,7 @@ class JwtService extends Utils.EventEmitter {
         })
         .catch((error) => {
           // this.emit('onAutoLogout', 'Token has expired!');
-          reject(error.response)
+          reject(error?.response)
         });
     });
   };
@@ -89,7 +90,7 @@ class JwtService extends Utils.EventEmitter {
           }
         })
         .catch((error) => {
-          reject(error.response);
+          reject(error?.response);
         })
     });
   };
@@ -103,7 +104,7 @@ class JwtService extends Utils.EventEmitter {
           resolve(response)
         })
         .catch((error) => {
-          reject(error.response);
+          reject(error?.response);
         })
     });
   };
@@ -117,7 +118,7 @@ class JwtService extends Utils.EventEmitter {
           resolve(response)
         })
         .catch((error) => {
-          reject(error.response);
+          reject(error?.response);
         })
     });
   };
@@ -131,7 +132,7 @@ class JwtService extends Utils.EventEmitter {
           resolve(response)
         })
         .catch((error) => {
-          reject(error.response);
+          reject(error?.response);
         })
     });
   };
@@ -141,7 +142,7 @@ class JwtService extends Utils.EventEmitter {
       axios
         .post(jwtServiceConfig.logout)
         .catch((error) => {
-          reject(error.response);
+          reject(error?.response);
         });
     });
   };
@@ -153,7 +154,7 @@ class JwtService extends Utils.EventEmitter {
         return true;
       })
       .catch((error) => {
-        return (error.response.status === 401) ? this.refreshToken() : false;
+        return (error?.response?.status === 401) ? this.refreshToken() : false;
       });
 
   };

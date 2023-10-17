@@ -1,0 +1,4 @@
+"uid","start_frame","end_frame","shots","description"
+"test:E001:SQ001:SH0010",103,115,"newShot1,newShot2","New description"
+"test:E001:SQ001:SH0020",103,105,"newShot1,newShot3","New description"
+"test:E001:SQ001:SH0030",101,150,"newShot1,newShot2","New description"

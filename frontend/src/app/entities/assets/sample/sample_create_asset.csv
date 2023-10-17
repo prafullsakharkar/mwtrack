@@ -1,0 +1,5 @@
+name,asset_type,prefix,client_name,description
+newAsset1,Character,,,new one
+newAsset2,Character,,,new 2
+newAsset3,Prop,,,new 3
+newAsset4,Set,,,new 4

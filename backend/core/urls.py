@@ -1,4 +1,6 @@
 from apis.accounts.urls import account_urls
+from apis.entities.urls import entity_urls
+from apis.utilities.urls import utility_urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -25,6 +27,8 @@ urlpatterns = [
 
 # Add app urls here
 urlpatterns += account_urls
+urlpatterns += utility_urls
+urlpatterns += entity_urls
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

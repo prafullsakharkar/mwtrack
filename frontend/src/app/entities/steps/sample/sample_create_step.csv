@@ -1,0 +1,6 @@
+"name","asset","shot","priority"
+"Layout","","test:E001:SQ001:SH0010","High"
+"Layout","","test:E001:SQ001:SH0020","Medium"
+"Animation","","test:E001:SQ001:SH0030","Low"
+"Layout","","test:E001:SQ001:SH0040",""
+"Modeling","test:newAsset4","",""

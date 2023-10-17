@@ -1,0 +1,5 @@
+uid,asset_type,prefix,client_name,description
+test:newAsset1,Prop,NA1,CL_NA_1,Decription 1
+test:newAsset2,Set,NA2,CL_NA_2, Decription 2
+test:newAsset3,Prop,NA3,CL_NA_3,Decription 3
+test:newAsset4,Set,NA4,CL_NA_4,Decription 4

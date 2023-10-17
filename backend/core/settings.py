@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "apis.accounts",
+    "apis.utilities",
+    "apis.entities",
 ]
 
 MIDDLEWARE = [

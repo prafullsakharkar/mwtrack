@@ -1,0 +1,5 @@
+"name","sequence","start_frame","end_frame","shots","description"
+"SH0020","test:E001:SQ001",101,234,"newShot1,newShot2","New description"
+"SH0030","test:E001:SQ001",101,234,"newShot1,newShot2","New description"
+"SH0040","test:E001:SQ001",101,234,"newShot1,newShot2","New description"
+"SH0050","test:E001:SQ001",101,234,"newShot1,newShot2","New description"

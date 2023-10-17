@@ -1,7 +1,5 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
-// import User from './users/User';
-// import UserForm from './users/UserForm';
 import authRoles from '@/auth/authRoles';
 
 const User = lazy(() => import('./users/User'));
@@ -22,10 +20,6 @@ const AccountConfigs = {
       path: 'accounts/users',
       element: <User />,
       children: [
-        // {
-        //   path: ':id',
-        //   element: <UserView />,
-        // },
         {
           path: ':id/edit',
           element: <UserForm />,

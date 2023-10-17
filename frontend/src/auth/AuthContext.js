@@ -27,7 +27,7 @@ function AuthProvider({ children }) {
           success(user, 'Hi ' + user?.first_name + ', Welcome back!');
         })
         .catch((error) => {
-          pass(error.detail);
+          pass(error?.detail);
         });
     });
 

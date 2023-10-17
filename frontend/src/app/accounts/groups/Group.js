@@ -9,7 +9,7 @@ import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import GroupHeader from './GroupHeader';
 import GroupList from './GroupList';
 import reducer from './store';
-import { getGroups } from './store/groupSlice';
+import { getGroups, openNewGroupDialog } from './store/groupSlice';
 import GroupDialog from './GroupDialog';
 
 const Root = styled(PageSimple)(({ theme }) => ({
@@ -38,7 +38,7 @@ function GroupApp(props) {
 	return (
 		<>
 			<Root
-				header={<GroupHeader pageLayout={pageLayout} />}
+				header={<GroupHeader pageLayout={pageLayout} entity="Groups" openNewDialog={openNewGroupDialog()} />}
 				content={<GroupList />}
 				ref={pageLayout}
 				scroll={isMobile ? 'normal' : 'content'}
