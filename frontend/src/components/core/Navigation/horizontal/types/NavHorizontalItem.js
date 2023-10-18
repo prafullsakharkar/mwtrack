@@ -6,8 +6,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { memo, useMemo } from 'react';
 import withRouter from '@/components/core/withRouter';
-import NavBadge from '../../NavBadge';
-import SvgIcon from '../../../SvgIcon';
+import NavBadge from '@/components/core/Navigation/NavBadge';
+import SvgIcon from '@/components/core/SvgIcon';
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   color: theme.palette.text.primary,

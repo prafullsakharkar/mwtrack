@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSelector, createSlice } from '@reduxjs/toolkit';
 import navigationConfig from '@/configs/navigationConfig';
-import Utils from '@/libs/index';
+import Utils from '@/libs/Utils';
 import _ from '@/lodash';
 
 const navigationAdapter = createEntityAdapter();

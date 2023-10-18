@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectUsers } from './store/userSlice';
 import MuiTable from '@/components/core/MuiTable';
 import { Typography } from '@mui/material';
+import UserMultiSelectMenu from './MultiSelectMenu';
 
 function UserList(props) {
 	const data = useSelector(selectUsers) || [];
@@ -96,6 +97,9 @@ function UserList(props) {
 			isLoading={isLoading}
 			data={data}
 			columns={columns}
+			renderTopToolbarCustomActions={({ table }) => (
+				<UserMultiSelectMenu selectedUserIds={table.getSelectedRowModel().rows.map(row => row.original.id)} />
+			)}
 		/>
 	);
 }

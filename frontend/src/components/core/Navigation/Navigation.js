@@ -4,16 +4,10 @@ import { memo } from 'react';
 import _ from 'src/lodash';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import NavHorizontalLayout1 from './horizontal/NavHorizontalLayout1';
-import NavVerticalLayout1 from './vertical/NavVerticalLayout1';
-import NavVerticalLayout2 from './vertical/NavVerticalLayout2';
 import NavHorizontalCollapse from './horizontal/types/NavHorizontalCollapse';
 import NavHorizontalGroup from './horizontal/types/NavHorizontalGroup';
 import NavHorizontalItem from './horizontal/types/NavHorizontalItem';
 import NavHorizontalLink from './horizontal/types/NavHorizontalLink';
-import NavVerticalCollapse from './vertical/types/NavVerticalCollapse';
-import NavVerticalGroup from './vertical/types/NavVerticalGroup';
-import NavVerticalItem from './vertical/types/NavVerticalItem';
-import NavVerticalLink from './vertical/types/NavVerticalLink';
 import { registerComponent } from './NavItem';
 
 const inputGlobalStyles = (
@@ -29,9 +23,12 @@ const inputGlobalStyles = (
           },
         },
         '&.dense': {
+          maxHeight: 180,
+          overflow: 'auto',
           '& .core-list-item': {
             minHeight: 32,
             height: 32,
+            minWidth: 120,
             '& .core-list-item-text': {
               padding: '0 0 0 8px',
             },
@@ -45,16 +42,11 @@ const inputGlobalStyles = (
 /*
 Register  Navigation Components
  */
-registerComponent('vertical-group', NavVerticalGroup);
-registerComponent('vertical-collapse', NavVerticalCollapse);
-registerComponent('vertical-item', NavVerticalItem);
-registerComponent('vertical-link', NavVerticalLink);
 registerComponent('horizontal-group', NavHorizontalGroup);
 registerComponent('horizontal-collapse', NavHorizontalCollapse);
 registerComponent('horizontal-item', NavHorizontalItem);
 registerComponent('horizontal-link', NavHorizontalLink);
-registerComponent('vertical-divider', () => <Divider className="my-16" />);
-registerComponent('horizontal-divider', () => <Divider className="my-16" />);
+registerComponent('horizontal-divider', () => <Divider className="my-8" />);
 
 function Navigation(props) {
   const options = _.pick(props, [
@@ -72,8 +64,6 @@ function Navigation(props) {
       <>
         {inputGlobalStyles}
         {props.layout === 'horizontal' && <NavHorizontalLayout1 {...options} />}
-        {props.layout === 'vertical' && <NavVerticalLayout1 {...options} />}
-        {props.layout === 'vertical-2' && <NavVerticalLayout2 {...options} />}
       </>
     );
   }
@@ -85,7 +75,7 @@ Navigation.propTypes = {
 };
 
 Navigation.defaultProps = {
-  layout: 'vertical',
+  layout: 'horizontal',
 };
 
 export default memo(Navigation);

@@ -3,14 +3,10 @@ import axios from 'axios';
 
 const url = '/api/v1/account/groups/';
 
-export const getGroups = createAsyncThunk('groupApp/groups/getGroups', async (routeParams, { getState }) => {
-	routeParams = routeParams || getState().groupApp.groups.routeParams;
-	const response = await axios.get(url, {
-		params: routeParams
-	});
+export const getGroups = createAsyncThunk('groupApp/groups/getGroups', async () => {
+	const response = await axios.get(url);
 	const data = await response.data;
-
-	return { data, routeParams };
+	return data;
 });
 
 export const getGroup = createAsyncThunk(
@@ -149,9 +145,7 @@ const groupsSlice = createSlice({
 			state.searchText = '';
 		},
 		[getGroups.fulfilled]: (state, action) => {
-			const { data, routeParams } = action.payload;
-			groupsAdapter.setAll(state, data);
-			state.routeParams = routeParams;
+			groupsAdapter.setAll(state, action.payload);
 			state.searchText = '';
 		}
 	}

@@ -5,13 +5,16 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import SvgIcon from '@/components/core/SvgIcon';
 import { selectUser } from '@/stores/userSlice';
+import { appendNavigationItem, resetNavigation, updateNavigationItem } from '@/stores/core/navigationSlice';
+import authRoles from '@/auth/authRoles';
 
 function UserMenu(props) {
+  const dispatch = useDispatch()
   const user = useSelector(selectUser);
   const [userMenu, setUserMenu] = useState(null);
 
@@ -22,6 +25,100 @@ function UserMenu(props) {
   const userMenuClose = () => {
     setUserMenu(null);
   };
+
+
+  const projectsData = useSelector(({ core }) => core.projects);
+  const projects = projectsData?.entities && Object.values(projectsData.entities)
+
+
+  useEffect(() => {
+    dispatch(resetNavigation());
+    projects?.map((item, id) => {
+
+      const projNav = {
+        id: item.uid,
+        title: item.code,
+        type: 'collapse',
+        icon: (item.is_episodic) ? 'material-solid:movie' : 'heroicons-solid:film',
+        thumbnail: item.thumbnail,
+        children: [
+          {
+            id: item.uid + '-overview',
+            title: 'Overview',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/overview',
+          },
+          {
+            id: item.uid + '-assign-task',
+            title: 'Task Assignment',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/assign-task',
+          },
+          {
+            id: item.uid + '-assets',
+            title: 'Assets',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/assets',
+          },
+          (item.is_episodic) ? {
+            id: item.uid + '-episodes',
+            title: 'Episodes',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/episodes',
+          } : { id: item.uid + '-episodes' },
+          {
+            id: item.uid + '-sequences',
+            title: 'Sequences',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/sequences',
+          },
+          {
+            id: item.uid + '-shots',
+            title: 'Shots',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/shots',
+          },
+          {
+            id: item.uid + '-steps',
+            title: 'Steps',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/steps',
+          },
+          {
+            id: item.uid + '-tasks',
+            title: 'Tasks',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/tasks',
+          },
+          {
+            id: item.uid + '-versions',
+            title: 'Versions',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/versions',
+          },
+          {
+            id: item.uid + '-publishes',
+            title: 'Publishes',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/publishes',
+          },
+          {
+            id: item.uid + '-notes',
+            title: 'Notes',
+            type: 'item',
+            url: '/entity/project/' + item.uid + '/notes',
+          },
+        ]
+      }
+
+      dispatch(appendNavigationItem(
+        projNav, "projects"
+      ))
+    })
+
+  }, [projects])
+
+
 
   return (
     <>

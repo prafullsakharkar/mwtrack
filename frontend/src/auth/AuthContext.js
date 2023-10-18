@@ -6,6 +6,7 @@ import { showMessage } from '@/stores/core/messageSlice';
 import { logoutUser, setUser } from '@/stores/userSlice';
 import jwtService from './jwtService';
 import Logo from '@/components/layout/Logo';
+import { getProjects } from 'src/app/entities/projects/store/projectSlice';
 
 const AuthContext = React.createContext();
 
@@ -25,6 +26,7 @@ function AuthProvider({ children }) {
         .signInWithToken()
         .then((user) => {
           success(user, 'Hi ' + user?.first_name + ', Welcome back!');
+          dispatch(getProjects())
         })
         .catch((error) => {
           pass(error?.detail);

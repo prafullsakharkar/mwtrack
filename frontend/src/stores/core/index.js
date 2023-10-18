@@ -4,6 +4,7 @@ import message from './messageSlice';
 import navbar from './navbarSlice';
 import navigation from './navigationSlice';
 import settings from './settingsSlice';
+import projects from 'src/app/entities/projects/store/projectSlice';
 
 const reducers = combineReducers({
   navigation,
@@ -11,6 +12,7 @@ const reducers = combineReducers({
   navbar,
   message,
   dialog,
+  projects,
 });
 
 export default reducers;

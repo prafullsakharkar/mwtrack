@@ -11,6 +11,7 @@ import UserHeader from './UserHeader';
 import UserList from './UserList';
 import reducer from './store';
 import { getUsers } from './store/userSlice';
+import { getGroups } from '../groups/store/groupSlice';
 
 const Root = styled(PageSimple)(({ theme }) => ({
   '& .PageSimple-header': {
@@ -34,6 +35,7 @@ function UserApp(props) {
 
   useDeepCompareEffect(() => {
     dispatch(getUsers());
+    dispatch(getGroups());
   }, [dispatch]);
 
   useEffect(() => {

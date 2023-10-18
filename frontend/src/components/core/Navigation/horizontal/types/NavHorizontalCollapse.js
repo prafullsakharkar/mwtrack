@@ -2,10 +2,8 @@ import NavLinkAdapter from '@/components/core/NavLinkAdapter';
 import { styled, useTheme } from '@mui/material/styles';
 import { useDebounce } from '@/hooks/index';
 import Grow from '@mui/material/Grow';
-import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Paper from '@mui/material/Paper';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { memo, useMemo, useState } from 'react';
@@ -15,6 +13,7 @@ import withRouter from '@/components/core/withRouter';
 import NavBadge from '../../NavBadge';
 import NavItem from '../../NavItem';
 import SvgIcon from '../../../SvgIcon';
+import { Grid, IconButton, ImageListItem, ImageListItemBar, Paper, Typography } from '@mui/material';
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -76,7 +75,6 @@ function NavHorizontalCollapse(props) {
                 <StyledListItem
                   button
                   className={clsx(
-                    'core-list-item',
                     opened && 'open',
                     isUrlInChildren(item, props.location.pathname) && 'active'
                   )}
@@ -91,22 +89,52 @@ function NavHorizontalCollapse(props) {
                   sx={item.sx}
                   disabled={item.disabled}
                 >
-                  {item.icon && (
-                    <SvgIcon
-                      color="action"
-                      className={clsx('core-list-item-icon shrink-0', item.iconClass)}
-                    >
-                      {item.icon}
-                    </SvgIcon>
-                  )}
+                  {item.thumbnail ? (
+                    <Grid className=''>
+                      <Paper
+                        sx={{
+                          height: 60,
+                          width: 120,
+                          // backgroundColor: (theme) =>
+                          //   theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                        }}
+                      >
+                        <ImageListItem key={item.title} className="cursor-pointer">
+                          <img
+                            src={item.thumbnail}
+                            alt={item.title}
+                            className="max-w-120 max-h-60 rounded-16"
+                            onClick={() => history.push("/entity/project/" + item.id + "/overview")}
+                            srcSet={item.thumbnail}
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center z-20">
+                            <Typography variant='h6'>
 
-                  <ListItemText
-                    className="core-list-item-text"
-                    primary={item.title}
-                    classes={{ primary: 'text-13 truncate' }}
-                  />
+                              {item.title}
+                            </Typography>
+                          </div>
+                        </ImageListItem>
+                      </Paper>
+                    </Grid>
+                  ) : (<>
+                    {item.icon && (
+                      <SvgIcon
+                        color="action"
+                        className={clsx('core-list-item-icon shrink-0', item.iconClass)}
+                      >
+                        {item.icon}
+                      </SvgIcon>
+                    )}
 
-                  {item.badge && <NavBadge className="mx-4" badge={item.badge} />}
+                    <ListItemText
+                      className="core-list-item-text"
+                      primary={item.title}
+                      classes={{ primary: 'text-13 truncate' }}
+                    />
+
+                    {item.badge && <NavBadge className="mx-4" badge={item.badge} />}
+                  </>)}
                   <IconButton
                     disableRipple
                     className="w-16 h-16 ltr:ml-4 rtl:mr-4 p-0"

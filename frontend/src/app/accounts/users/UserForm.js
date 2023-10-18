@@ -86,14 +86,15 @@ function UserForm(props) {
   return (
     <>
       <Box
-        className="relative w-full h-96 sm:h-96 px-32 sm:px-48"
+        className="relative w-full h-88 px-32 sm:px-48"
         sx={{
           backgroundColor: 'background.default',
         }}
       >
+        {!form.avatar && (<Typography className="flex justify-center mt-24 text-3xl font-bold truncate">Create New User</Typography>)}
       </Box>
       <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
-        {form?.avatar ? (<div className="w-full">
+        {form?.avatar && (<div className="w-full">
           <div className="flex flex-auto items-end -mt-64">
             <Avatar
               sx={{
@@ -114,7 +115,7 @@ function UserForm(props) {
             </div>
           </div>
         </div>
-        ) : (<Typography className="mt-12 text-3xl font-bold truncate">Create New User</Typography>)}
+        )}
 
         <Controller
           control={control}
