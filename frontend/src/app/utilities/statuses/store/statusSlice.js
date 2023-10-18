@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const url = '/api/v1/utility/status/';
+const url = '/api/v1/utility/statuses/';
 
 export const getStatuses = createAsyncThunk('statusApp/statuses/getStatuses', async () => {
 	const response = await axios.get(url);

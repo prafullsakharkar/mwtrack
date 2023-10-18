@@ -16,7 +16,7 @@ function ProjectsHeader(props) {
   const { pathname } = history.location;
 
   return (
-    <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-16 px-16 md:px-16">
+    <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-8 px-16 md:px-16">
       <Typography
         component={Link}
         to={pathname}
@@ -45,7 +45,6 @@ function ProjectsHeader(props) {
           <SvgIcon color="disabled">heroicons-solid:search</SvgIcon>
         </Paper>
         <Button
-          className="mx-8"
           variant="contained"
           color="secondary"
           component={NavLinkAdapter}

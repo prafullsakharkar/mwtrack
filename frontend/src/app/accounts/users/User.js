@@ -7,11 +7,11 @@ import { useDeepCompareEffect } from '@/hooks';
 import { styled } from '@mui/material/styles';
 import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import UserSidebarContent from './UserSidebar';
-import UserHeader from './UserHeader';
 import UserList from './UserList';
 import reducer from './store';
 import { getUsers } from './store/userSlice';
 import { getGroups } from '../groups/store/groupSlice';
+import Header from '@/components/core/Header/Header';
 
 const Root = styled(PageSimple)(({ theme }) => ({
   '& .PageSimple-header': {
@@ -44,7 +44,7 @@ function UserApp(props) {
 
   return (
     <Root
-      header={<UserHeader pageLayout={pageLayout} />}
+      header={<Header pageLayout={pageLayout} entity="Users" />}
       content={<UserList />}
       ref={pageLayout}
       rightSidebarContent={<UserSidebarContent />}

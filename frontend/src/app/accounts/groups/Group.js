@@ -6,11 +6,11 @@ import { useParams } from 'react-router-dom';
 import { useDeepCompareEffect } from '@/hooks';
 import { styled } from '@mui/material/styles';
 import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
-import GroupHeader from './GroupHeader';
 import GroupList from './GroupList';
 import reducer from './store';
 import { getGroups, openNewGroupDialog } from './store/groupSlice';
 import GroupDialog from './GroupDialog';
+import Header from '@/components/core/Header/Header';
 
 const Root = styled(PageSimple)(({ theme }) => ({
 	'& .PageSimple-header': {
@@ -38,7 +38,7 @@ function GroupApp(props) {
 	return (
 		<>
 			<Root
-				header={<GroupHeader pageLayout={pageLayout} entity="Groups" openNewDialog={openNewGroupDialog()} />}
+				header={<Header pageLayout={pageLayout} entity="Groups" openNewDialog={openNewGroupDialog()} />}
 				content={<GroupList />}
 				ref={pageLayout}
 				scroll={isMobile ? 'normal' : 'content'}

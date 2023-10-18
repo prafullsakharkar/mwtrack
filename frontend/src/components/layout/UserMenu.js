@@ -26,14 +26,11 @@ function UserMenu(props) {
     setUserMenu(null);
   };
 
-
-  const projectsData = useSelector(({ core }) => core.projects);
-  const projects = projectsData?.entities && Object.values(projectsData.entities)
-
+  const projects = useSelector(({ core }) => core.projects.entities);
 
   useEffect(() => {
     dispatch(resetNavigation());
-    projects?.map((item, id) => {
+    projects && Object.values(projects)?.map((item, id) => {
 
       const projNav = {
         id: item.uid,

@@ -1,7 +1,7 @@
 import PageSimple from '@/components/core/PageSimple';
 import withReducer from '@/stores/withReducer';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useDeepCompareEffect } from '@/hooks';
 import { styled } from '@mui/material/styles';
@@ -10,8 +10,9 @@ import ProjectSidebarContent from './ProjectSidebar';
 import ProjectHeader from './ProjectHeader';
 import ProjectList from './ProjectList';
 import reducer from './store';
-import { getProjects } from './store/projectSlice';
 import { getUsers } from 'src/app/accounts/users/store/userSlice';
+import { getProjects, setProjectSearchText, selectProjectSearchText } from './store/projectSlice';
+import Header from '@/components/core/Header/Header';
 
 const Root = styled(PageSimple)(({ theme }) => ({
 	'& .PageSimple-header': {
@@ -32,6 +33,7 @@ function ProjectApp(props) {
 	const routeParams = useParams();
 	const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
 	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+	const searchText = useSelector(selectProjectSearchText);
 
 	useDeepCompareEffect(() => {
 		dispatch(getProjects());
@@ -44,7 +46,14 @@ function ProjectApp(props) {
 
 	return (
 		<Root
-			header={<ProjectHeader pageLayout={pageLayout} />}
+			header={
+				<Header
+					pageLayout={pageLayout}
+					entity="Projects"
+					searchText={searchText}
+					setSearchText={setProjectSearchText}
+				/>
+			}
 			content={<ProjectList />}
 			ref={pageLayout}
 			rightSidebarContent={<ProjectSidebarContent />}

@@ -40,7 +40,7 @@ function NavHorizontalLayout1(props) {
         'navigation whitespace-nowrap flex p-0',
         `active-${active}-list`,
         dense && 'dense',
-        className
+        className,
       )}
     >
       {navigation.map((_item) => (

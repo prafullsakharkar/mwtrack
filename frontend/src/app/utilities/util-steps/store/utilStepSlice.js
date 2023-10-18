@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const url = '/api/v1/utility/steps/';
+const url = '/api/v1/utility/utilsteps/';
 
 export const getUtilSteps = createAsyncThunk('utilStepApp/utilStep/getUtilSteps', async (routeParams, { getState }) => {
 	routeParams = routeParams || getState().utilStepApp.utilSteps.routeParams;
