@@ -1,11 +1,10 @@
-
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Icon from '@mui/material/Icon';
 import format from 'date-fns/format';
 import { useSelector } from 'react-redux';
 import { selectUsers } from './store/userSlice';
-import MuiTable from '@/components/core/MuiTable';
+import MuiTable from '@/components/core/Table/MuiTable';
 import { Typography } from '@mui/material';
 import UserMultiSelectMenu from './MultiSelectMenu';
 

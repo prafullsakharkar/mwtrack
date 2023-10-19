@@ -16,7 +16,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import history from "@history";
+import history from "@/history";
 import Popover from '@mui/material/Popover';
 import format from 'date-fns/format';
 import { useParams, Link } from 'react-router-dom';
@@ -92,19 +92,19 @@ function TasksList(props) {
 		setPagination({ pageIndex: 0, pageSize: 25 })
 	}, [globalFilter])
 
-	
+
 	const columns = React.useMemo(
 		() => [
 			{
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/task/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/task/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)
@@ -114,17 +114,17 @@ function TasksList(props) {
 				accessorKey: 'name',
 			},
 			{
-				header    : "Assignee(s)",
-				accessorKey  : "users",
-				Cell     : ({ row }) => (
+				header: "Assignee(s)",
+				accessorKey: "users",
+				Cell: ({ row }) => (
 					row.original.users ? (<AvatarGroup max={3}>
 						{row.original.users.map((userId, index) => (
 							<Tooltip key={index} title={users && users[userId]?.username} placement="top">
-								<Avatar key={index} src={users && users[userId]?.avatar} sx={{ width: 32, height: 32 }}/>
+								<Avatar key={index} src={users && users[userId]?.avatar} sx={{ width: 32, height: 32 }} />
 							</Tooltip>
 						))}
 					</AvatarGroup>) : (<span> No User </span>)
-				),                 
+				),
 			},
 			{
 				header: 'Bid (in days)',
@@ -133,18 +133,18 @@ function TasksList(props) {
 			{
 				header: 'Status',
 				accessorKey: 'status',
-				Cell: ({ cell }) => (                  
-				  <Button size="small" variant="outlined" sx={{ color : cell.getValue()?.color }}>
-						{ cell.getValue()?.name }
+				Cell: ({ cell }) => (
+					<Button size="small" variant="outlined" sx={{ color: cell.getValue()?.color }}>
+						{cell.getValue()?.name}
 					</Button>
 				),
 			},
 			{
 				header: 'Priority',
 				accessorKey: 'priority',
-				Cell: ({ cell }) => (                  
-				  <Button size="small" variant="outlined" sx={{ color : cell.getValue()?.color }}>
-						{ cell.getValue()?.name }
+				Cell: ({ cell }) => (
+					<Button size="small" variant="outlined" sx={{ color: cell.getValue()?.color }}>
+						{cell.getValue()?.name}
 					</Button>
 				),
 			},
@@ -206,7 +206,7 @@ function TasksList(props) {
 				enableRowSelection
 				enableRowActions
 				enableStickyHeader
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

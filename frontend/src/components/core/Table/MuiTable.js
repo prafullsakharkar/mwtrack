@@ -23,7 +23,7 @@ function MuiTable(props) {
         enableRowSelection
         enableRowActions
         enableStickyHeader
-        muiTableContainerProps={{ sx: { maxHeight: '490px', } }}
+        muiTableContainerProps={{ sx: { maxHeight: (document.documentElement.offsetHeight - 250) } }}
         state={{ isLoading: isLoading, showSkeletons: isLoading }}
         displayColumnDefOptions={{
           'mrt-row-actions': {

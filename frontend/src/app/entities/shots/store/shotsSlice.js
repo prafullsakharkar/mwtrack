@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
 const url = '/api/v1/entity/shot/';
 export const getShots = createAsyncThunk(
@@ -23,7 +23,7 @@ export const getShots = createAsyncThunk(
 );
 
 export const getShot = createAsyncThunk(
-	'shotsApp/shot/getShot', 
+	'shotsApp/shot/getShot',
 	async (routeParams, { dispatch, getState }) => {
 		const id = routeParams.uid
 		const response = await axios.get(url + id + '/');
@@ -106,7 +106,7 @@ export const removeShots = createAsyncThunk(
 				}
 			]
 		});
-		
+
 		return entityIds;
 	}
 );
@@ -225,8 +225,8 @@ const shotsSlice = createSlice({
 		},
 	},
 	extraReducers: {
-		[removeShot.fulfilled]: (state, action) => {			
-			shotsAdapter.removeOne(state, action.payload)		
+		[removeShot.fulfilled]: (state, action) => {
+			shotsAdapter.removeOne(state, action.payload)
 		},
 		[updateShot.fulfilled]: (state, action) => {
 			if (action.payload.length > 0) {
@@ -257,7 +257,7 @@ const shotsSlice = createSlice({
 		},
 		[getShots.fulfilled]: (state, action) => {
 			const data = action.payload
-			shotsAdapter.setAll(state, data?.results || data );
+			shotsAdapter.setAll(state, data?.results || data);
 			state.totalCount = data?.count || data.length
 			state.isLoading = false;
 		},

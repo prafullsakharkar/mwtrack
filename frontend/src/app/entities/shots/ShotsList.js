@@ -15,7 +15,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Typography from '@mui/material/Typography';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import history from "@history";
+import history from "@/history";
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import format from 'date-fns/format';
@@ -115,45 +115,45 @@ function ShotsList(props) {
 					id: `${row.name.toLowerCase().replace(' ', '_')}_users`,
 					header: 'Users',
 					accessorKey: `${row.name.toLowerCase().replace(' ', '_')}.users`,
-					Cell     : ({ cell }) => (
+					Cell: ({ cell }) => (
 						cell.getValue() ? (<AvatarGroup max={3}>
 							{cell.getValue().map((userId, index) => (
 								<Tooltip key={index} title={users && users[userId]?.username} placement="top">
-									<Avatar key={index} src={users && users[userId]?.avatar} sx={{ width: 32, height: 32 }}/>
+									<Avatar key={index} src={users && users[userId]?.avatar} sx={{ width: 32, height: 32 }} />
 								</Tooltip>
 							))}
 						</AvatarGroup>) : null
-					),   
+					),
 				}
 			]
 		}
 	}) || []
 
-	useEffect(() =>{
-		const entities = data.length > 0 && data.map( (row) => {
+	useEffect(() => {
+		const entities = data.length > 0 && data.map((row) => {
 			row?.steps?.map((step) => {
 				row = {
 					...row,
-					[step.name.toLowerCase().replace(' ', '_')] : step
+					[step.name.toLowerCase().replace(' ', '_')]: step
 				}
 			})
 			return row
 		})
 		setShots(entities)
-	},[data])
-	
+	}, [data])
+
 	const columns = React.useMemo(
 		() => [
 			{
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/shot/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/shot/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)
@@ -174,16 +174,16 @@ function ShotsList(props) {
 				header: 'Total Frames',
 				accessorKey: 'total_frames',
 				Cell: ({ row }) => (
-					<Typography>					
+					<Typography>
 						{row.original.end_frame - row.original.start_frame}
 					</Typography>
 				)
 			},
 			{
-				header: 'Assets',
+				header: 'Asset',
 				accessorKey: 'assets',
 				Cell: ({ row }) => (
-					<Typography>					
+					<Typography>
 						{row.original.assets.join(", ")}
 					</Typography>
 				)
@@ -240,7 +240,7 @@ function ShotsList(props) {
 				enableRowSelection
 				enableRowActions
 				enableStickyHeader
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

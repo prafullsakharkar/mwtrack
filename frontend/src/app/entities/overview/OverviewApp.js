@@ -1,4 +1,4 @@
-import FusePageSimple from '@fuse/core/FusePageSimple';
+import PageSimple from '@/components/core/PageSimple';
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Tab from '@mui/material/Tab';
@@ -6,32 +6,32 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
-import withReducer from 'app/store/withReducer';
+import withReducer from '@/stores/withReducer';
 import reducer from './store';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import OverviewList from './OverviewList';
-import EntityHeader from 'app/shared-components/header/EntityHeader';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import { getProject, selectProjectById } from 'src/app/main/apps/entities/projects/store/projectsSlice';
-import { getAsset, selectAssetById } from 'src/app/main/apps/entities/assets/store/assetsSlice';
-import { getEpisode, selectEpisodeById } from 'src/app/main/apps/entities/episodes/store/episodesSlice';
-import { getSequence, selectSequenceById } from 'src/app/main/apps/entities/sequences/store/sequencesSlice';
-import { getShot, selectShotById } from 'src/app/main/apps/entities/shots/store/shotsSlice';
-import { getStep, selectStepById } from 'src/app/main/apps/entities/steps/store/stepsSlice';
-import { getTask, selectTaskById } from 'src/app/main/apps/entities/tasks/store/tasksSlice';
-import { getVersion, selectVersionById } from 'src/app/main/apps/entities/versions/store/versionsSlice';
+import EntityHeader from '@/components/core/header/EntityHeader';
+import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
+import { getProject, selectProjectById } from 'src/app/entities/projects/store/projectsSlice';
+import { getAsset, selectAssetById } from 'src/app/entities/assets/store/assetsSlice';
+import { getEpisode, selectEpisodeById } from 'src/app/entities/episodes/store/episodesSlice';
+import { getSequence, selectSequenceById } from 'src/app/entities/sequences/store/sequencesSlice';
+import { getShot, selectShotById } from 'src/app/entities/shots/store/shotsSlice';
+import { getStep, selectStepById } from 'src/app/entities/steps/store/stepsSlice';
+import { getTask, selectTaskById } from 'src/app/entities/tasks/store/tasksSlice';
+import { getVersion, selectVersionById } from 'src/app/entities/versions/store/versionsSlice';
 
 import NoteDialog from '../notes/NoteDialog';
 
-import { getStatuses } from 'src/app/main/apps/utilities/statuses/store/statusesSlice';
-import { getPriorities } from 'src/app/main/apps/utilities/priorities/store/prioritiesSlice';
-import { getAccounts } from 'src/app/main/apps/users/accounts/store/accountsSlice';
+import { getStatuses } from 'src/app/utilities/statuses/store/statusesSlice';
+import { getPriorities } from 'src/app/utilities/priorities/store/prioritiesSlice';
+import { getUsers } from 'src/app/accounts/users/store/userSlice';
 
 
-const Root = styled(FusePageSimple)(({ theme }) => ({
-  '& .FusePageSimple-header': {
+const Root = styled(PageSimple)(({ theme }) => ({
+  '& .PageSimple-header': {
     backgroundColor: theme.palette.background.paper,
     borderBottomWidth: 1,
     borderStyle: 'solid',
@@ -61,7 +61,7 @@ function OverviewApp() {
   useEffect(() => {
     dispatch(getStatuses());
     dispatch(getPriorities());
-    dispatch(getAccounts());
+    dispatch(getUsers());
   }, [])
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function OverviewApp() {
             src="static/images/pages/profile/entity_cover.jpg"
             alt="Overview Cover"
           />
-           {/* <video width="100%" height="240" src="static/images/pages/profile/cover.mp4" controls>
+          {/* <video width="100%" height="240" src="static/images/pages/profile/cover.mp4" controls>
               Your browser does not support the video tag.
           </video>  */}
 

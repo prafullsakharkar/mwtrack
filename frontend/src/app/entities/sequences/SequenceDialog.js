@@ -1,5 +1,5 @@
-import { useForm } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils/FuseUtils';
+import { useForm } from '@/hooks';
+import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import Slider from '@mui/material/Slider';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { useDeepCompareEffect } from '@fuse/hooks';
+import { useDeepCompareEffect } from '@/hooks';
 import { useParams } from 'react-router-dom';
 import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
@@ -32,10 +32,10 @@ import {
 	closeCsvUpdateDialog,
 	updateMultipleSequences,
 } from './store/sequencesSlice';
-import AtomUploadXls from 'app/shared-components/xls_table/AtomUploadXls';
+import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_sequence.csv';
 import SampleUpdateCsv from './sample/sample_update_sequence.csv';
-import { getEpisodes } from 'src/app/main/apps/entities/episodes/store/episodesSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
 
 const defaultFormState = {
 	name: '',
@@ -54,7 +54,7 @@ function SequenceDialog(props) {
 
 	const { form, handleChange, setForm, setInForm, resetForm } = useForm(defaultFormState);
 
-	const projects = useSelector(({fuse}) => fuse.projects.entities)
+	const projects = useSelector(({ fuse }) => fuse.projects.entities)
 	const project = routeParams?.uid?.split(':')[0].toLowerCase()
 	const is_episodic = projects && projects[project]?.is_episodic
 
@@ -224,7 +224,7 @@ function SequenceDialog(props) {
 				changedValues.uid = item
 				return changedValues
 			})
-			dispatch(updateMultipleSequences({ multipleSequenceList:formData, project }));
+			dispatch(updateMultipleSequences({ multipleSequenceList: formData, project }));
 		} else if (sequenceDialog.type === 'new') {
 			const sequencesData = Object.entries(sequences).filter(([key, value]) => value === true).map(([key, value]) => {
 				return { ...form, ...{ "name": key } }
@@ -305,9 +305,9 @@ function SequenceDialog(props) {
 							fullWidth
 						/>
 					</div>)}
-					{sequenceDialog.type === 'new' &&  (
+					{sequenceDialog.type === 'new' && (
 						<>
-							{ is_episodic && (<div className="flex flex-row mb-16">
+							{is_episodic && (<div className="flex flex-row mb-16">
 								<div className="flex-1">
 									<Autocomplete
 										value={form.episode}
@@ -319,12 +319,12 @@ function SequenceDialog(props) {
 										getOptionLabel={option => option.split(':').slice(-1).join()}
 										id="episode"
 										options={episodeIds}
-										renderInput={(params) => 
-											<TextField {...params} 
-												label="Episode" 
-												required 
+										renderInput={(params) =>
+											<TextField {...params}
+												label="Episode"
+												required
 												variant="outlined"
-											 />
+											/>
 										}
 									/>
 								</div>

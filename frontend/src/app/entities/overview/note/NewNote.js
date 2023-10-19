@@ -4,14 +4,14 @@ import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
 import Icon from '@mui/material/Icon';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import SvgIcon from '@/components/core/SvgIcon';
 import Button from '@mui/material/Button';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import NoteForm from './NoteForm';
-import { addNote, replyNote } from 'src/app/main/apps/entities/notes/store/notesSlice';
+import { addNote, replyNote } from 'src/app/entities/notes/store/notesSlice';
 import axios from 'axios';
 
 const useStyles = makeStyles({
@@ -108,7 +108,7 @@ function NewNote(props) {
 				</Paper>
 			) : noteType === 'Reply' ? (
 				<Button onClick={handleFormOpen}
-					endIcon={<FuseSvgIcon size={14}>heroicons-outline:reply</FuseSvgIcon>}
+					endIcon={<SvgIcon size={14}>heroicons-outline:reply</SvgIcon>}
 				>
 					Reply
 				</Button>

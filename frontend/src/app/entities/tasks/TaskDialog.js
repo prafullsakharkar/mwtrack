@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useForm } from '@fuse/hooks';
+import { useForm } from '@/hooks';
 import AppBar from '@mui/material/AppBar';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
@@ -33,16 +33,16 @@ import {
 	updateMultipleTasks,
 } from './store/tasksSlice';
 
-import { getEpisodes } from 'src/app/main/apps/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/main/apps/entities/sequences/store/sequencesSlice';
-import { getShots } from 'src/app/main/apps/entities/shots/store/shotsSlice';
-import { getSteps } from 'src/app/main/apps/entities/steps/store/stepsSlice';
-import { getAssets } from 'src/app/main/apps/entities/assets/store/assetsSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
+import { getShots } from 'src/app/entities/shots/store/shotsSlice';
+import { getSteps } from 'src/app/entities/steps/store/stepsSlice';
+import { getAsset } from 'src/app/entities/assets/store/assetsSlice';
 
 import { getTaskUsers } from './store/tasksSlice';
-import { getUtilSteps } from 'src/app/main/apps/utilities/steps/store/stepsSlice';
+import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
 
-import AtomUploadXls from 'app/shared-components/xls_table/AtomUploadXls';
+import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_task.csv';
 import SampleUpdateCsv from './sample/sample_update_task.csv';
 
@@ -317,7 +317,7 @@ function TaskDialog(props) {
 				uid: project,
 				entity: "project"
 			}
-			dispatch(getAssets(params));
+			dispatch(getAsset(params));
 		}
 	}, [assetType]);
 

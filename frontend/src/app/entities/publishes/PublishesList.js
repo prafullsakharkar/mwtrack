@@ -16,7 +16,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import history from "@history";
+import history from "@/history";
 import Popover from '@mui/material/Popover';
 import format from 'date-fns/format';
 import { useParams, Link } from 'react-router-dom';
@@ -38,7 +38,7 @@ import {
 	openMultiplePublishDialog,
 } from './store/publishesSlice';
 
-import LightBoxImageList from "app/shared-components/image/LightBoxImageList";
+import LightBoxImageList from "@/components/core/image/LightBoxImageList";
 
 function publishesList(props) {
 	const dispatch = useDispatch();
@@ -93,20 +93,20 @@ function publishesList(props) {
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/publish/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/publish/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)
 			},
 			{
-				header    : "Components",
-				accessorKey  : "components",
-				Cell: ({ cell }) => (cell.getValue()?.map( item => item?.name + ', '))
+				header: "Components",
+				accessorKey: "components",
+				Cell: ({ cell }) => (cell.getValue()?.map(item => item?.name + ', '))
 			},
 			{
 				header: 'Name',
@@ -119,9 +119,9 @@ function publishesList(props) {
 			{
 				header: 'Status',
 				accessorKey: 'status',
-				Cell: ({ cell }) => (                  
-				  <Button size="small" variant="outlined" sx={{ color : cell.getValue()?.color }}>
-						{ cell.getValue()?.name }
+				Cell: ({ cell }) => (
+					<Button size="small" variant="outlined" sx={{ color: cell.getValue()?.color }}>
+						{cell.getValue()?.name}
 					</Button>
 				),
 			},
@@ -181,7 +181,7 @@ function publishesList(props) {
 				enableRowSelection
 				enableStickyHeader
 				enableStickyFooter
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

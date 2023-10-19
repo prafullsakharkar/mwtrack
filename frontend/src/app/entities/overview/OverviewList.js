@@ -1,4 +1,4 @@
-import FuseScrollbars from '@fuse/core/FuseScrollbars';
+import Scrollbars from '@/components/core/Scrollbars';
 import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
@@ -23,7 +23,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import SvgIcon from '@/components/core/SvgIcon';
 import { lighten } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Timeline from '@mui/lab/Timeline';
@@ -44,9 +44,9 @@ import ActivityTimelineItem from './ActivityTimelineItem';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import NewNote from './note/NewNote';
-import SingleLineImageList from 'app/shared-components/image/SingleLineImageList';
-import { getNotes, selectNotes } from 'src/app/main/apps/entities/notes/store/notesSlice';
-import { getActivities, selectActivities } from 'src/app/main/apps/tools/activities/store/activitiesSlice';
+import SingleLineImageList from '@/components/core/image/SingleLineImageList';
+import { getNotes, selectNotes } from 'src/app/entities/notes/store/notesSlice';
+import { getActivities, selectActivities } from 'src/app/tools/activities/store/activitiesSlice';
 import NoteCard from './note/NoteCard';
 
 function OverviewList(props) {
@@ -190,7 +190,7 @@ function OverviewList(props) {
                   },
                 }}
               >
-                <FuseScrollbars className="grow overflow-auto max-h-480" id="div-activities" >
+                <Scrollbars className="grow overflow-auto max-h-480" id="div-activities" >
                   {activities?.map((item, index) => (
                     <ActivityTimelineItem
                       last={activities.length === index + 1}
@@ -198,7 +198,7 @@ function OverviewList(props) {
                       key={'acts-' + index}
                     />
                   ))}
-                </FuseScrollbars>
+                </Scrollbars>
                 {isLoadingAct && (<Box className='flex items-center flex-row justify-center mb-12'>
                   <CircularProgress color="secondary" />
                 </Box>)}
@@ -221,7 +221,7 @@ function OverviewList(props) {
             {entity === 'shot' && (<ShotInfo data={data} users={users} />)}
             {entity === 'step' && (<StepInfo data={data} users={users} statuses={statuses} priorities={priorities} />)}
             {entity === 'task' && (<TaskInfo data={data} users={users} statuses={statuses} priorities={priorities} />)}
-            {entity === 'version' && (<VersionInfo data={data} users={users} statuses={statuses}/>)}
+            {entity === 'version' && (<VersionInfo data={data} users={users} statuses={statuses} />)}
             {entity === 'note' && (<NoteInfo data={data} users={users} />)}
 
           </Card>

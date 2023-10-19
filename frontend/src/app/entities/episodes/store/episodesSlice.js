@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
 const url = '/api/v1/entity/episode/';
 
@@ -24,7 +24,7 @@ export const getEpisodes = createAsyncThunk(
 );
 
 export const getEpisode = createAsyncThunk(
-	'episodesApp/episode/getEpisode', 
+	'episodesApp/episode/getEpisode',
 	async (routeParams, { dispatch, getState }) => {
 		const id = routeParams.uid
 		const response = await axios.get(url + id + '/');
@@ -82,7 +82,7 @@ export const removeEpisode = createAsyncThunk(
 		const data = await response.data;
 
 		if (data) return id;
-		
+
 	}
 );
 
@@ -109,7 +109,7 @@ export const removeEpisodes = createAsyncThunk(
 				}
 			]
 		});
-		
+
 		return entityIds;
 	}
 );
@@ -229,8 +229,8 @@ const episodesSlice = createSlice({
 		},
 	},
 	extraReducers: {
-		[removeEpisode.fulfilled]: (state, action) => {			
-			episodesAdapter.removeOne(state, action.payload)		
+		[removeEpisode.fulfilled]: (state, action) => {
+			episodesAdapter.removeOne(state, action.payload)
 		},
 		[updateEpisode.fulfilled]: (state, action) => {
 			if (action.payload.length > 0) {
@@ -261,7 +261,7 @@ const episodesSlice = createSlice({
 		},
 		[getEpisodes.fulfilled]: (state, action) => {
 			const data = action.payload
-			episodesAdapter.setAll(state, data?.results || data );
+			episodesAdapter.setAll(state, data?.results || data);
 			state.totalCount = data?.count || data.length
 			state.isLoading = false;
 		},

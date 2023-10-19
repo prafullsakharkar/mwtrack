@@ -5,7 +5,7 @@ import {
   TimelineItem,
   TimelineSeparator,
 } from '@mui/lab';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import SvgIcon from '@/components/core/SvgIcon';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
@@ -26,7 +26,7 @@ function ActivityTimelineItem({ item, last }) {
             {item.user && <Avatar src={item.user.avatar} />}
           </Tooltip>
           {!item.user?.avatar && (
-            <FuseSvgIcon>heroicons-solid:star</FuseSvgIcon>
+            <SvgIcon>heroicons-solid:star</SvgIcon>
           )}
         </TimelineDot>
 

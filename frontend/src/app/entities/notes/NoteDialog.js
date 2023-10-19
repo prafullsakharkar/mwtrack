@@ -1,5 +1,5 @@
-import { useForm } from '@fuse/hooks';
-import FuseScrollbars from '@fuse/core/FuseScrollbars';
+import { useForm } from '@/hooks';
+import Scrollbars from '@/components/core/Scrollbars';
 import Tooltip from '@mui/material/Tooltip';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
@@ -36,7 +36,7 @@ import {
 	closeCsvUpdateDialog,
 	updateMultipleNotes,
 } from './store/notesSlice';
-import AtomUploadXls from 'app/shared-components/xls_table/AtomUploadXls';
+import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_note.csv';
 import SampleUpdateCsv from './sample/sample_update_note.csv';
 
@@ -50,7 +50,7 @@ function NoteDialog(props) {
 
 	const noteDialog = props.noteDialog;
 	const noteIds = props.noteIds
-	const user = useSelector( ({user}) => user.id)
+	const user = useSelector(({ user }) => user.id)
 
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
 
@@ -202,7 +202,7 @@ function NoteDialog(props) {
 		if (noteDialog.type === 'csvCreate' && multipleNoteList.length > 0) {
 			dispatch(addNotes(multipleNoteList));
 		} else if (noteDialog.type === 'csvUpdate' && multipleNoteList.length > 0) {
-			dispatch(updateMultipleNotes({multipleNoteList, project}));
+			dispatch(updateMultipleNotes({ multipleNoteList, project }));
 		} else if (noteDialog.type === 'new') {
 			form.files = files
 			form[entity] = routeParams.uid
@@ -241,10 +241,10 @@ function NoteDialog(props) {
 								: noteDialog.type === 'edit'
 									? 'Edit Note'
 									: noteDialog.type === 'editReply'
-									? 'Edit Reply'
-									: noteDialog.type === 'csvCreate'
-										? 'Create Notes from CSV'
-										: 'Update Notes from CSV'
+										? 'Edit Reply'
+										: noteDialog.type === 'csvCreate'
+											? 'Create Notes from CSV'
+											: 'Update Notes from CSV'
 						}
 					</Typography>
 					<Typography variant="subtitle1" color="inherit" >
@@ -286,19 +286,19 @@ function NoteDialog(props) {
 						</div>)}
 					{noteDialog.type === 'new' && (<>
 						<div className="flex items-center px-4">
-								<Tooltip title="Add attachments" placement="bottom">
-									<div>
-										<label htmlFor="button-file">
-											<input accept="image/*" multiple className="hidden" id="button-file" type="file" onChange={handleUploadChange} />
-											<IconButton className="w-32 h-32 mx-4 p-0" component="span">
-												<Icon fontSize="small">attachment</Icon>
-											</IconButton>
-										</label>
-									</div>
-								</Tooltip>
-							</div>
+							<Tooltip title="Add attachments" placement="bottom">
+								<div>
+									<label htmlFor="button-file">
+										<input accept="image/*" multiple className="hidden" id="button-file" type="file" onChange={handleUploadChange} />
+										<IconButton className="w-32 h-32 mx-4 p-0" component="span">
+											<Icon fontSize="small">attachment</Icon>
+										</IconButton>
+									</label>
+								</div>
+							</Tooltip>
+						</div>
 						<div className="flex flex-col w-full">
-							<FuseScrollbars className="flex flex-auto w-full max-h-640">
+							<Scrollbars className="flex flex-auto w-full max-h-640">
 								<div className="w-full">
 									{form.preview && form.preview !== '' && (
 										<div className="relative">
@@ -340,9 +340,9 @@ function NoteDialog(props) {
 									)}
 
 								</div>
-							</FuseScrollbars>
+							</Scrollbars>
 						</div>
-						</>)}
+					</>)}
 
 				</DialogContent>
 

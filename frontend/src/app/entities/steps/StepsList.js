@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import history from "@history";
+import history from "@/history";
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import format from 'date-fns/format';
@@ -95,12 +95,12 @@ function StepsList(props) {
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/step/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/step/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)
@@ -116,18 +116,18 @@ function StepsList(props) {
 			{
 				header: 'Status',
 				accessorKey: 'status',
-				Cell: ({ cell }) => (                  
-				  <Button size="small" variant="outlined" sx={{ color : cell.getValue()?.color }}>
-						{ cell.getValue()?.name }
+				Cell: ({ cell }) => (
+					<Button size="small" variant="outlined" sx={{ color: cell.getValue()?.color }}>
+						{cell.getValue()?.name}
 					</Button>
 				),
 			},
 			{
 				header: 'Priority',
 				accessorKey: 'priority',
-				Cell: ({ cell }) => (                  
-				  <Button size="small" variant="outlined" sx={{ color : cell.getValue()?.color }}>
-						{ cell.getValue()?.name }
+				Cell: ({ cell }) => (
+					<Button size="small" variant="outlined" sx={{ color: cell.getValue()?.color }}>
+						{cell.getValue()?.name}
 					</Button>
 				),
 			},
@@ -190,7 +190,7 @@ function StepsList(props) {
 				enableRowSelection
 				enableRowActions
 				enableStickyHeader
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

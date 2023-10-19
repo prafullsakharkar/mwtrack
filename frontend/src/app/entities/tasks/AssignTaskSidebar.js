@@ -1,4 +1,4 @@
-import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
+import NavLinkAdapter from '@/components/core/NavLinkAdapter';
 import Divider from '@mui/material/Divider';
 import Icon from '@mui/material/Icon';
 import List from '@mui/material/List';
@@ -13,11 +13,11 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAssignTasks } from './store/tasksSlice';
-import { getEpisodes } from 'src/app/main/apps/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/main/apps/entities/sequences/store/sequencesSlice';
-import { getShots } from 'src/app/main/apps/entities/shots/store/shotsSlice';
-import { getAssets } from 'src/app/main/apps/entities/assets/store/assetsSlice';
-import { getUtilSteps } from 'src/app/main/apps/utilities/steps/store/stepsSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
+import { getShots } from 'src/app/entities/shots/store/shotsSlice';
+import { getAsset } from 'src/app/entities/assets/store/assetsSlice';
+import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
 
 const useStyles = makeStyles(theme => ({
 	listItem: {
@@ -86,7 +86,7 @@ function AssignTaskSidebar(props) {
 	}, [shotIds, assetIds, sequenceIds, entityType])
 
 	useEffect(() => {
-		{/* Get Util Steps from entity Type like 'Asset' or 'shot' */}
+		{/* Get Util Steps from entity Type like 'Asset' or 'shot' */ }
 		setStep(null)
 		setEntity([])
 		const params = {
@@ -103,7 +103,7 @@ function AssignTaskSidebar(props) {
 				uid: project,
 				entity: "project"
 			}
-			dispatch(getAssets(params));
+			dispatch(getAsset(params));
 		}
 	}, [assetType]);
 
@@ -148,114 +148,114 @@ function AssignTaskSidebar(props) {
 					<Divider />
 
 					<List>
-							{/* entityTypes = ["Asset", "Shot", "Sequence"] */}
-							<div className="p-8 flex flex-col justify-center">
-								<Autocomplete
-									value={entityType}
-									onChange={(event, newValue) => {
-										setEntityType(newValue)
-										resetFormData()
-									}}
-									disableClearable
-									id="entityType"
-									options={entityTypes}
-									renderInput={(params) => <TextField {...params} label="Entity" required variant="outlined" />}
-								/>
-							</div>
-							{entityType && entityType === 'Asset' && (
-								<>
-									{/* assetTypes = ["Set", "Prop", "Character", "Vehicle", "Fx"] */}
-									<div className="p-8 flex flex-col justify-center">
-										<Autocomplete
-											value={assetType}
-											onChange={(event, newValue) => {
-												setAssetType(newValue)
-											}}
-											disableClearable
-											id="assetType"
-											options={assetTypes}
-											renderInput={(params) => <TextField {...params} label="Asset Type" required variant="outlined" />}
-										/>
-									</div>
-								</>
-							)}
-							{entityType && ['Sequence', 'Shot'].includes(entityType) && (
-								<>
-									<div className="p-8 flex flex-col justify-center">
-										<Autocomplete
-											value={episode}
-											onChange={(event, newValue) => {
-												setEpisode(newValue)
-											}}
-											disableClearable
-											getOptionLabel={option => option.split(':').slice(1).join('_')}
-											id="episode"
-											options={episodeIds}
-											renderInput={(params) => <TextField {...params} label="Episode" required variant="outlined" />}
-										/>
-									</div>
-								</>
-							)}
-							{entityType && entityType === 'Shot' && (
-								<>
-									<div className="p-8 flex flex-col justify-center">
-										<Autocomplete
-											value={sequence}
-											onChange={(event, newValue) => {
-												setSequence(newValue)
-											}}
-											disableClearable
-											getOptionLabel={option => option.split(':').slice(-1).join('_')}
-											id="sequence"
-											options={sequenceIds}
-											renderInput={(params) => <TextField {...params} label="Sequence" required variant="outlined" />}
-										/>
-									</div>
-								</>
-							)}
-							<div className="p-8 flex flex-col justify-center">
-								<Autocomplete
-									multiple
-									limitTags={1}
-									value={entity}
-									onChange={(event, newValue) => {
-										setEntity(newValue)
-									}}
-									// disableClearable
-									disableCloseOnSelect
-									// isOptionEqualToValue={(option, value) => option === value}
-									// renderOption={(option, { selected }) => (
-									// 	<li>
-									// 		<Checkbox
-									// 			icon={icon}
-									// 			checkedIcon={checkedIcon}
-									// 			style={{ marginRight: 4 }}
-									// 			checked={selected}
-									// 		/>
-									// 		{option.split(':').slice(-1).join('_')}
-									// 	</li>
-									// )}
-									getOptionLabel={option => option.split(':').slice(-1).join('_')}
-									id={entityType}
-									options={entities}
-									renderInput={(params) => <TextField {...params} label={entityType} required variant="outlined" />}
-								/>
+						{/* entityTypes = ["Asset", "Shot", "Sequence"] */}
+						<div className="p-8 flex flex-col justify-center">
+							<Autocomplete
+								value={entityType}
+								onChange={(event, newValue) => {
+									setEntityType(newValue)
+									resetFormData()
+								}}
+								disableClearable
+								id="entityType"
+								options={entityTypes}
+								renderInput={(params) => <TextField {...params} label="Entity" required variant="outlined" />}
+							/>
+						</div>
+						{entityType && entityType === 'Asset' && (
+							<>
+								{/* assetTypes = ["Set", "Prop", "Character", "Vehicle", "Fx"] */}
+								<div className="p-8 flex flex-col justify-center">
+									<Autocomplete
+										value={assetType}
+										onChange={(event, newValue) => {
+											setAssetType(newValue)
+										}}
+										disableClearable
+										id="assetType"
+										options={assetTypes}
+										renderInput={(params) => <TextField {...params} label="Asset Type" required variant="outlined" />}
+									/>
+								</div>
+							</>
+						)}
+						{entityType && ['Sequence', 'Shot'].includes(entityType) && (
+							<>
+								<div className="p-8 flex flex-col justify-center">
+									<Autocomplete
+										value={episode}
+										onChange={(event, newValue) => {
+											setEpisode(newValue)
+										}}
+										disableClearable
+										getOptionLabel={option => option.split(':').slice(1).join('_')}
+										id="episode"
+										options={episodeIds}
+										renderInput={(params) => <TextField {...params} label="Episode" required variant="outlined" />}
+									/>
+								</div>
+							</>
+						)}
+						{entityType && entityType === 'Shot' && (
+							<>
+								<div className="p-8 flex flex-col justify-center">
+									<Autocomplete
+										value={sequence}
+										onChange={(event, newValue) => {
+											setSequence(newValue)
+										}}
+										disableClearable
+										getOptionLabel={option => option.split(':').slice(-1).join('_')}
+										id="sequence"
+										options={sequenceIds}
+										renderInput={(params) => <TextField {...params} label="Sequence" required variant="outlined" />}
+									/>
+								</div>
+							</>
+						)}
+						<div className="p-8 flex flex-col justify-center">
+							<Autocomplete
+								multiple
+								limitTags={1}
+								value={entity}
+								onChange={(event, newValue) => {
+									setEntity(newValue)
+								}}
+								// disableClearable
+								disableCloseOnSelect
+								// isOptionEqualToValue={(option, value) => option === value}
+								// renderOption={(option, { selected }) => (
+								// 	<li>
+								// 		<Checkbox
+								// 			icon={icon}
+								// 			checkedIcon={checkedIcon}
+								// 			style={{ marginRight: 4 }}
+								// 			checked={selected}
+								// 		/>
+								// 		{option.split(':').slice(-1).join('_')}
+								// 	</li>
+								// )}
+								getOptionLabel={option => option.split(':').slice(-1).join('_')}
+								id={entityType}
+								options={entities}
+								renderInput={(params) => <TextField {...params} label={entityType} required variant="outlined" />}
+							/>
 
-							</div>
-							<div className="p-8 flex flex-col justify-center">
-								<Autocomplete
-									value={step}
-									onChange={(event, newValue) => {
-										setStep(newValue)
-									}}
-									disableClearable
-									getOptionLabel={option => option.name}
-									id="step"
-									options={Object.values(utilSteps)}
-									renderInput={(params) => <TextField {...params} label="Step" required variant="outlined" />}
-								/>
-							</div>
-						</List>
+						</div>
+						<div className="p-8 flex flex-col justify-center">
+							<Autocomplete
+								value={step}
+								onChange={(event, newValue) => {
+									setStep(newValue)
+								}}
+								disableClearable
+								getOptionLabel={option => option.name}
+								id="step"
+								options={Object.values(utilSteps)}
+								renderInput={(params) => <TextField {...params} label="Step" required variant="outlined" />}
+							/>
+						</div>
+					</List>
 				</Paper>
 			</div>
 		</div>

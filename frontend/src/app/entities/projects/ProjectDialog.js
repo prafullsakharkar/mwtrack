@@ -1,5 +1,5 @@
-import { useForm } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils/FuseUtils';
+import { useForm } from '@/hooks';
+import Utils from '@fuse/utils/Utils';
 import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';

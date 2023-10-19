@@ -1,15 +1,15 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
-import withReducer from 'app/store/withReducer';
+import PageCarded from '@/components/core/PageCarded';
+import withReducer from '@/stores/withReducer';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import reducer from './store';
-import EntityHeader from 'app/shared-components/header/EntityHeader';
+import EntityHeader from '@/components/core/header/EntityHeader';
 import ShotDialog from './ShotDialog';
 import ShotsList from './ShotsList';
-import { getUtilSteps } from 'src/app/main/apps/utilities/steps/store/stepsSlice';
-import { getAccounts } from 'src/app/main/apps/users/accounts/store/accountsSlice';
+import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
+import { getUsers } from 'src/app/accounts/users/store/userSlice';
 
 function ShotsApp() {
 	const dispatch = useDispatch();
@@ -23,13 +23,13 @@ function ShotsApp() {
 	const shotIds = useSelector(({ shotsApp }) => shotsApp.shots.ids);
 
 	useEffect(() => {
-		dispatch(getUtilSteps({entity: 'Shot'}));
-		dispatch(getAccounts());
+		dispatch(getUtilSteps({ entity: 'Shot' }));
+		dispatch(getUsers());
 	}, []);
 
 	return (
 		<>
-			<FusePageCarded
+			<PageCarded
 				header={<EntityHeader entity='Shots' totalCount={totalCount} />}
 				content={<ShotsList />}
 				scroll={isMobile ? 'normal' : 'content'}

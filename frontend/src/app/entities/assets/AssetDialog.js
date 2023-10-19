@@ -1,4 +1,4 @@
-import { useForm } from '@fuse/hooks';
+import { useForm } from '@/hooks';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
-import AtomUploadXls from 'src/app/shared-components/xls_table/AtomUploadXls';
+// import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import diff from 'object-diff';
 import { useDispatch, useSelector } from 'react-redux';
 import SampleCreateCsv from './sample/sample_create_asset.csv';
@@ -21,13 +21,13 @@ import SampleUpdateCsv from './sample/sample_update_asset.csv';
 import {
 	updateAsset,
 	addAsset,
-	updateMultipleAssets,
+	updateMultipleAsset,
 	closeNewAssetDialog,
 	closeEditAssetDialog,
 	closeMultipleAssetDialog,
 	closeCsvCreateDialog,
 	closeCsvUpdateDialog,
-} from './store/assetsSlice';
+} from './store/assetSlice';
 
 const defaultFormState = {
 	prefix: '',
@@ -159,14 +159,14 @@ function AssetDialog(props) {
 		if (assetDialog.type === 'csvCreate' && multipleAssetList.length > 0) {
 			dispatch(addAsset(multipleAssetList));
 		} else if (assetDialog.type === 'csvUpdate' && multipleAssetList.length > 0) {
-			dispatch(updateMultipleAssets({ multipleAssetList, project }));
+			dispatch(updateMultipleAsset({ multipleAssetList, project }));
 		} else if (assetDialog.type === 'multiple' && assetDialog.data && assetDialog.data.length > 0) {
 			const formData = assetDialog.data.map(item => {
 				const changedValues = diff(defaultFormState, form) // remove blank entries
 				changedValues.uid = item
 				return changedValues
 			})
-			dispatch(updateMultipleAssets({ multipleAssetList: formData, project }));
+			dispatch(updateMultipleAsset({ multipleAssetList: formData, project }));
 
 		} else if (assetDialog.type === 'new') {
 			dispatch(addAsset(form));
@@ -195,12 +195,12 @@ function AssetDialog(props) {
 							assetDialog.type === 'new'
 								? 'New Asset'
 								: assetDialog.type === 'multiple'
-									? 'Multiple Assets'
+									? 'Multiple Asset'
 									: assetDialog.type === 'edit'
 										? 'Edit Asset'
 										: assetDialog.type === 'csvCreate'
-											? 'Create Assets from CSV'
-											: 'Update Assets from CSV'
+											? 'Create Asset from CSV'
+											: 'Update Asset from CSV'
 						}
 					</Typography>
 					<Typography variant="subtitle1" color="inherit" >
@@ -216,7 +216,7 @@ function AssetDialog(props) {
 								<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateAsset.csv">
 									Download Sample CSV
 								</a>
-								<AtomUploadXls validate={validateCsvCreate} />
+								{/* <AtomUploadXls validate={validateCsvCreate} /> */}
 							</>
 						)}
 						{assetDialog.type === 'csvUpdate' && (
@@ -224,7 +224,7 @@ function AssetDialog(props) {
 								<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateAsset.csv">
 									Download Sample CSV
 								</a>
-								<AtomUploadXls validate={validateCsvUpdate} />
+								{/* <AtomUploadXls validate={validateCsvUpdate} /> */}
 							</>
 						)}
 

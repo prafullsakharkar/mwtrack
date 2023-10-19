@@ -1,18 +1,18 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
+import PageCarded from '@/components/core/PageCarded';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import withReducer from 'app/store/withReducer';
+import withReducer from '@/stores/withReducer';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import reducer from './store';
-import EntityHeader from 'app/shared-components/header/EntityHeader';
+import EntityHeader from '@/components/core/header/EntityHeader';
 import PublishDialog from './PublishDialog';
 import PublishesList from './PublishesList';
-import { getStatuses } from 'src/app/main/apps/utilities/statuses/store/statusesSlice';
-import { getPriorities } from 'src/app/main/apps/utilities/priorities/store/prioritiesSlice';
+import { getStatuses } from 'src/app/utilities/statuses/store/statusesSlice';
+import { getPriorities } from 'src/app/utilities/priorities/store/prioritiesSlice';
 
 
 function publishesApp() {
@@ -41,12 +41,12 @@ function publishesApp() {
 
 	return (
 		<>
-			<FusePageCarded
+			<PageCarded
 				header={<EntityHeader
 					entity='publishes'
-					totalCount={totalCount} 
+					totalCount={totalCount}
 				/>}
-				content={<PublishesList 
+				content={<PublishesList
 					users={users}
 					statuses={statuses}
 				/>}

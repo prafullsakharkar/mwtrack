@@ -18,12 +18,12 @@ import { lighten } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import SvgIcon from '@/components/core/SvgIcon';
 import format from 'date-fns/format';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import NewNote from './NewNote';
-import { openEditNoteDialog, openEditReplyDialog } from 'src/app/main/apps/entities/notes/store/notesSlice';
+import { openEditNoteDialog, openEditReplyDialog } from 'src/app/entities/notes/store/notesSlice';
 
 function NoteCard(props) {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ function NoteCard(props) {
               }
             }
           >
-            <FuseSvgIcon>heroicons-outline:pencil</FuseSvgIcon>
+            <SvgIcon>heroicons-outline:pencil</SvgIcon>
           </IconButton>
         }
         title={
@@ -142,86 +142,86 @@ function NoteCard(props) {
           <div className="">
             <div className="flex items-center">
               <Typography>{note.replies.length} replies</Typography>
-              <FuseSvgIcon size={16} className="mx-4" color="action">
+              <SvgIcon size={16} className="mx-4" color="action">
                 heroicons-outline:chevron-down
-              </FuseSvgIcon>
+              </SvgIcon>
             </div>
 
             <List>
               {note.replies.map((reply) => (
                 <>
-                <div key={reply.id}>
-                  <ListItem className="px-0 -mx-8">
-                    <Avatar
-                      alt={reply.created_by?.username}
-                      src={reply.created_by?.avatar}
-                      className="mx-8"
-                    />
-                    <ListItemText
-                      className="px-4"
-                      primary={
-                        <div className="flex items-center space-x-8">
-                          <Typography
-                            className="font-normal"
-                            color="secondary"
-                            paragraph={false}
-                          >
-                            {reply.created_by?.username}
-                          </Typography>
-                          <Typography variant="caption">{format(new Date(reply.created_at), 'MMM dd, h:mm a')}</Typography>
-                        </div>
-                      }
-                      secondary={reply.message}
-                    />
-                    <IconButton aria-label="more" size="large"
-                      onClick={
-                        (ev) => {
-                          ev.preventDefault();
-                          dispatch(openEditReplyDialog(reply));
+                  <div key={reply.id}>
+                    <ListItem className="px-0 -mx-8">
+                      <Avatar
+                        alt={reply.created_by?.username}
+                        src={reply.created_by?.avatar}
+                        className="mx-8"
+                      />
+                      <ListItemText
+                        className="px-4"
+                        primary={
+                          <div className="flex items-center space-x-8">
+                            <Typography
+                              className="font-normal"
+                              color="secondary"
+                              paragraph={false}
+                            >
+                              {reply.created_by?.username}
+                            </Typography>
+                            <Typography variant="caption">{format(new Date(reply.created_at), 'MMM dd, h:mm a')}</Typography>
+                          </div>
                         }
-                      }
-                    >
-                      <FuseSvgIcon>heroicons-outline:pencil</FuseSvgIcon>
-                    </IconButton>
-                  </ListItem>
+                        secondary={reply.message}
+                      />
+                      <IconButton aria-label="more" size="large"
+                        onClick={
+                          (ev) => {
+                            ev.preventDefault();
+                            dispatch(openEditReplyDialog(reply));
+                          }
+                        }
+                      >
+                        <SvgIcon>heroicons-outline:pencil</SvgIcon>
+                      </IconButton>
+                    </ListItem>
 
-                
-                {reply?.attachments.map((attachment, index) => (
-                  <div className="flex items-center m-8" key={attachment.id}>
-                    {attachment.type.startsWith('image/') && (
-                      <img
-                        className="w-120 h-80 rounded-md overflow-hidden cursor-pointer"
-                        src={attachment.url}
-                        // src={"http://localhost:8000" + attachment.url}
-                        alt={attachment.name}
-                        onClick={() => setIsOpen(true)}
+
+                    {reply?.attachments.map((attachment, index) => (
+                      <div className="flex items-center m-8" key={attachment.id}>
+                        {attachment.type.startsWith('image/') && (
+                          <img
+                            className="w-120 h-80 rounded-md overflow-hidden cursor-pointer"
+                            src={attachment.url}
+                            // src={"http://localhost:8000" + attachment.url}
+                            alt={attachment.name}
+                            onClick={() => setIsOpen(true)}
+                          />
+                        )}
+
+                        {attachment.type.startsWith('application/') && (
+                          <Box
+                            sx={{ backgroundColor: 'background.default' }}
+                            className="flex items-center justify-center w-120 h-80 rounded-md overflow-hidden"
+                          >
+                            <Typography className="flex items-center justify-center text-sm font-semibold">
+                              {attachment.type.split('/')[1].trim().toUpperCase()}
+                            </Typography>
+                          </Box>
+                        )}
+                      </div>
+                    ))}
+                    {isOpen && (
+                      <Lightbox
+                        mainSrc={reply?.attachments[photoIndex]?.url}
+                        nextSrc={reply?.attachments[(photoIndex + 1) % reply?.attachments.length]?.url}
+                        prevSrc={reply?.attachments[(photoIndex + reply?.attachments.length - 1) % reply?.attachments.length]?.url}
+                        onCloseRequest={() => setIsOpen(false)}
+                        onMovePrevRequest={() => setPhotoIndex((photoIndex + reply?.attachments.length - 1) % reply?.attachments.length)}
+                        onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % reply?.attachments.length)}
                       />
                     )}
-      
-                    {attachment.type.startsWith('application/') && (
-                      <Box
-                        sx={{ backgroundColor: 'background.default' }}
-                        className="flex items-center justify-center w-120 h-80 rounded-md overflow-hidden"
-                      >
-                        <Typography className="flex items-center justify-center text-sm font-semibold">
-                          {attachment.type.split('/')[1].trim().toUpperCase()}
-                        </Typography>
-                      </Box>
-                    )}
                   </div>
-                ))}
-                {isOpen && (
-                  <Lightbox
-                    mainSrc={reply?.attachments[photoIndex]?.url}
-                    nextSrc={reply?.attachments[(photoIndex + 1) % reply?.attachments.length]?.url}
-                    prevSrc={reply?.attachments[(photoIndex + reply?.attachments.length - 1) % reply?.attachments.length]?.url}
-                    onCloseRequest={() => setIsOpen(false)}
-                    onMovePrevRequest={() => setPhotoIndex((photoIndex + reply?.attachments.length - 1) % reply?.attachments.length)}
-                    onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % reply?.attachments.length)}
-                  />
-                )}
-              </div>
-              </>
+                </>
               ))}
             </List>
           </div>

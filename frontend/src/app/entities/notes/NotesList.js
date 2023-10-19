@@ -19,7 +19,7 @@ import format from 'date-fns/format';
 import { useParams, Link } from 'react-router-dom';
 import { ExportToCsv } from 'export-to-csv';
 import { CSVLink, CSVDownload } from "react-csv";
-import history from "@history";
+import history from "@/history";
 import {
 	Edit as EditIcon,
 	Delete as DeleteIcon,
@@ -36,7 +36,7 @@ import {
 	openCsvCreateDialog,
 	openCsvUpdateDialog
 } from './store/notesSlice';
-import LightBoxImageList from "app/shared-components/image/LightBoxImageList";
+import LightBoxImageList from "@/components/core/image/LightBoxImageList";
 
 function NotesList(props) {
 	const dispatch = useDispatch();
@@ -106,10 +106,10 @@ function NotesList(props) {
 				// )
 			},
 			{
-				header    : "Attachments",
-				accessorKey  : "attachments",
-				Cell     : ({ cell }) => (
-					cell.getValue() ? (<LightBoxImageList media_files={cell.getValue()}/>) : null)           
+				header: "Attachments",
+				accessorKey: "attachments",
+				Cell: ({ cell }) => (
+					cell.getValue() ? (<LightBoxImageList media_files={cell.getValue()} />) : null)
 			},
 			{
 				header: 'Comment',
@@ -120,12 +120,12 @@ function NotesList(props) {
 				accessorKey: 'step',
 				Cell: ({ row }) => (
 					<span>
-						{ row.original.step 
-							? row.original.step : row.original.asset 
-							? row.original.asset : row.original.shot
-							? row.original.shot : row.original.sequence
-							? row.original.sequence : row.original.episode
-							? row.original.episode : row.original.project
+						{row.original.step
+							? row.original.step : row.original.asset
+								? row.original.asset : row.original.shot
+									? row.original.shot : row.original.sequence
+										? row.original.sequence : row.original.episode
+											? row.original.episode : row.original.project
 						}
 					</span>
 				),
@@ -190,7 +190,7 @@ function NotesList(props) {
 				enablePinning
 				enableRowActions
 				enableStickyHeader
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

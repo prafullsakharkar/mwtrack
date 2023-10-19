@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
 const url = '/api/v1/entity/task/';
 export const getTasks = createAsyncThunk(
@@ -11,7 +11,7 @@ export const getTasks = createAsyncThunk(
 		const uid = queryParams?.uid
 		const entity = queryParams?.entity
 
-		const endPoint = (entity && uid) ? '/api/v1/entity/'+entity+'/'+uid+'/tasks/' : url
+		const endPoint = (entity && uid) ? '/api/v1/entity/' + entity + '/' + uid + '/tasks/' : url
 
 		delete queryParams?.uid
 		delete queryParams?.entity
@@ -28,7 +28,7 @@ export const getTasks = createAsyncThunk(
 );
 
 export const getTask = createAsyncThunk(
-	'tasksApp/task/getTask', 
+	'tasksApp/task/getTask',
 	async (routeParams, { dispatch, getState }) => {
 		const id = routeParams.uid
 		const response = await axios.get(url + id + '/');
@@ -40,7 +40,7 @@ export const getTask = createAsyncThunk(
 export const getTaskUsers = createAsyncThunk(
 	'tasksApp/tasks/getTaskUser',
 	async (taskId, { dispatch, getState }) => {
-		const response = await axios.get('/api/v1/entity/task/'+taskId+"/user_tasks/");
+		const response = await axios.get('/api/v1/entity/task/' + taskId + "/user_tasks/");
 		const data = await response.data;
 		return data;
 	}
@@ -50,7 +50,8 @@ export const getAssignTasks = createAsyncThunk(
 	'tasksApp/tasks/getAssignTasks',
 	async (stepIds, { dispatch, getState }) => {
 		const response = await axios.get(url, {
-			params: {steps: stepIds + ''}});
+			params: { steps: stepIds + '' }
+		});
 		const data = await response.data;
 		return data;
 	}
@@ -99,7 +100,7 @@ export const updateTaskUser = createAsyncThunk(
 	async (task, { dispatch, getState }) => {
 		const id = task.id
 		delete task['id']
-		const response = await axios.patch('/api/v1/entity/usertask/'+id+'/', task);
+		const response = await axios.patch('/api/v1/entity/usertask/' + id + '/', task);
 		const data = await response.data;
 		return data;
 	}
@@ -136,7 +137,7 @@ export const removeTasks = createAsyncThunk(
 				}
 			]
 		});
-		
+
 		return entityIds;
 	}
 );
@@ -255,8 +256,8 @@ const tasksSlice = createSlice({
 		},
 	},
 	extraReducers: {
-		[removeTask.fulfilled]: (state, action) => {			
-			tasksAdapter.removeOne(state, action.payload)		
+		[removeTask.fulfilled]: (state, action) => {
+			tasksAdapter.removeOne(state, action.payload)
 		},
 		[updateTask.fulfilled]: (state, action) => {
 			if (action.payload.length > 0) {
@@ -287,7 +288,7 @@ const tasksSlice = createSlice({
 		},
 		[getTasks.fulfilled]: (state, action) => {
 			const data = action.payload
-			tasksAdapter.setAll(state, data?.results || data );
+			tasksAdapter.setAll(state, data?.results || data);
 			state.totalCount = data?.count || data.length
 			state.isLoading = false;
 		},

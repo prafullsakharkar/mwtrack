@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
 const url = '/api/v1/entity/note/';
 export const getNotes = createAsyncThunk(

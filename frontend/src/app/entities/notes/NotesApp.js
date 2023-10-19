@@ -1,14 +1,14 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
+import PageCarded from '@/components/core/PageCarded';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import withReducer from 'app/store/withReducer';
+import withReducer from '@/stores/withReducer';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import reducer from './store';
-import EntityHeader from 'app/shared-components/header/EntityHeader';
+import EntityHeader from '@/components/core/header/EntityHeader';
 import NoteDialog from './NoteDialog';
 import NotesList from './NotesList';
 
@@ -22,7 +22,7 @@ function NotesApp() {
 
 	return (
 		<>
-			<FusePageCarded
+			<PageCarded
 				header={<EntityHeader entity='Notes' totalCount={totalCount} />}
 				content={<NotesList />}
 				scroll={isMobile ? 'normal' : 'content'}

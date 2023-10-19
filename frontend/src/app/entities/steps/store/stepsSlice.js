@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
 const url = '/api/v1/entity/step/';
 export const getSteps = createAsyncThunk(
@@ -25,7 +25,7 @@ export const getSteps = createAsyncThunk(
 );
 
 export const getStep = createAsyncThunk(
-	'stepsApp/step/getStep', 
+	'stepsApp/step/getStep',
 	async (routeParams, { dispatch, getState }) => {
 		const id = routeParams.uid
 		const response = await axios.get(url + id + '/');
@@ -105,7 +105,7 @@ export const removeSteps = createAsyncThunk(
 				}
 			]
 		});
-		
+
 		return entityIds;
 	}
 );
@@ -224,8 +224,8 @@ const stepsSlice = createSlice({
 		},
 	},
 	extraReducers: {
-		[removeStep.fulfilled]: (state, action) => {			
-			stepsAdapter.removeOne(state, action.payload)		
+		[removeStep.fulfilled]: (state, action) => {
+			stepsAdapter.removeOne(state, action.payload)
 		},
 		[updateStep.fulfilled]: (state, action) => {
 			if (action.payload.length > 0) {
@@ -256,7 +256,7 @@ const stepsSlice = createSlice({
 		},
 		[getSteps.fulfilled]: (state, action) => {
 			const data = action.payload
-			stepsAdapter.setAll(state, data?.results || data );
+			stepsAdapter.setAll(state, data?.results || data);
 			state.totalCount = data?.count || data.length
 			state.isLoading = false;
 		},

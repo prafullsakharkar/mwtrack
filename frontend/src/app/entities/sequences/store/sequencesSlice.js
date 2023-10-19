@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
 const url = '/api/v1/entity/sequence/';
 
@@ -24,7 +24,7 @@ export const getSequences = createAsyncThunk(
 );
 
 export const getSequence = createAsyncThunk(
-	'sequencesApp/sequence/getSequence', 
+	'sequencesApp/sequence/getSequence',
 	async (routeParams, { dispatch, getState }) => {
 		const id = routeParams.uid
 		const response = await axios.get(url + id + '/');
@@ -82,7 +82,7 @@ export const removeSequence = createAsyncThunk(
 		const data = await response.data;
 
 		if (data) return id;
-		
+
 	}
 );
 
@@ -109,7 +109,7 @@ export const removeSequences = createAsyncThunk(
 				}
 			]
 		});
-		
+
 		return entityIds;
 	}
 );
@@ -228,8 +228,8 @@ const sequencesSlice = createSlice({
 		},
 	},
 	extraReducers: {
-		[removeSequence.fulfilled]: (state, action) => {			
-			sequencesAdapter.removeOne(state, action.payload)		
+		[removeSequence.fulfilled]: (state, action) => {
+			sequencesAdapter.removeOne(state, action.payload)
 		},
 		[updateSequence.fulfilled]: (state, action) => {
 			if (action.payload.length > 0) {
@@ -260,7 +260,7 @@ const sequencesSlice = createSlice({
 		},
 		[getSequences.fulfilled]: (state, action) => {
 			const data = action.payload
-			sequencesAdapter.setAll(state, data?.results || data );
+			sequencesAdapter.setAll(state, data?.results || data);
 			state.totalCount = data?.count || data.length
 			state.isLoading = false;
 		},

@@ -1,22 +1,22 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
+import PageCarded from '@/components/core/PageCarded';
 import IconButton from '@mui/material/IconButton';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import SvgIcon from '@/components/core/SvgIcon';
 import { Link } from 'react-router-dom';
-import withReducer from 'app/store/withReducer';
+import withReducer from '@/stores/withReducer';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import reducer from './store';
-import EntityHeader from 'app/shared-components/header/EntityHeader';
+import EntityHeader from '@/components/core/header/EntityHeader';
 import TaskDialog from './TaskDialog';
 import TasksList from './TasksList';
 import AssignTaskSidebar from './AssignTaskSidebar';
 import { getTasks, selectTasks, getAssignTasks } from './store/tasksSlice';
-import { getStatuses } from 'src/app/main/apps/utilities/statuses/store/statusesSlice';
-import { getPriorities } from 'src/app/main/apps/utilities/priorities/store/prioritiesSlice';
-import { getAccounts } from 'src/app/main/apps/users/accounts/store/accountsSlice';
+import { getStatuses } from 'src/app/utilities/statuses/store/statusesSlice';
+import { getPriorities } from 'src/app/utilities/priorities/store/prioritiesSlice';
+import { getUsers } from 'src/app/accounts/users/store/userSlice';
 
 
 function TasksApp(props) {
@@ -58,20 +58,20 @@ function TasksApp(props) {
 	useEffect(() => {
 		dispatch(getStatuses());
 		dispatch(getPriorities());
-		dispatch(getAccounts());
+		dispatch(getUsers());
 	}, []);
 
 	return (
 		<>
-			<FusePageCarded
+			<PageCarded
 				header={
 					<div className="flex items-center justify-center h-full w-full">
-						{ type === 'Assignment' && (<IconButton
+						{type === 'Assignment' && (<IconButton
 							onClick={(ev) => setLeftSidebarOpen(!leftSidebarOpen)}
 							aria-label="toggle left sidebar"
 							size="large"
 						>
-							<FuseSvgIcon>heroicons-outline:view-list</FuseSvgIcon>
+							<SvgIcon>heroicons-outline:view-list</SvgIcon>
 						</IconButton>)}
 						<EntityHeader entity='Tasks' totalCount={totalCount} />
 					</div>
@@ -83,7 +83,7 @@ function TasksApp(props) {
 				/>}
 				leftSidebarContent={
 					<div className="px-16 py-24">
-						<AssignTaskSidebar 
+						<AssignTaskSidebar
 							episodeIds={episodeIds}
 							sequenceIds={sequenceIds}
 							shotIds={shotIds}

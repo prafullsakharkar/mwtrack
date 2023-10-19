@@ -33,7 +33,7 @@ function ShotInfo(props) {
                 <Typography className="font-medium" color="text.secondary">{data.sequence}</Typography>
             </div>
             <div className="mb-24">
-                <Typography className="font-bold mb-4 text-15">Linked Assets</Typography>
+                <Typography className="font-bold mb-4 text-15">Linked Asset</Typography>
                 <Typography className="font-medium" color="text.secondary">{data.assets && data.assets.join(", ")}</Typography>
             </div>
             <div className="mb-24">

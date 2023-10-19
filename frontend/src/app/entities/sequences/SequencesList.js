@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import format from 'date-fns/format';
 import { useParams, Link } from 'react-router-dom';
-import history from "@history";
+import history from "@/history";
 import { ExportToCsv } from 'export-to-csv';
 import { CSVLink, CSVDownload } from "react-csv";
 import {
@@ -94,12 +94,12 @@ function SequencesList(props) {
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/sequence/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/sequence/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)
@@ -159,7 +159,7 @@ function SequencesList(props) {
 				enableRowSelection
 				enableRowActions
 				enableStickyHeader
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

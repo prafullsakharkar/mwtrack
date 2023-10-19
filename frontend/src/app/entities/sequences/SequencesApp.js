@@ -1,10 +1,10 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
-import withReducer from 'app/store/withReducer';
+import PageCarded from '@/components/core/PageCarded';
+import withReducer from '@/stores/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import reducer from './store';
-import EntityHeader from 'app/shared-components/header/EntityHeader';
+import EntityHeader from '@/components/core/header/EntityHeader';
 import SequenceDialog from './SequenceDialog';
 import SequencesList from './SequencesList';
 
@@ -19,7 +19,7 @@ function SequencesApp() {
 
 	return (
 		<>
-			<FusePageCarded
+			<PageCarded
 				header={<EntityHeader entity='Sequences' totalCount={totalCount} />}
 				content={<SequencesList />}
 				scroll={isMobile ? 'normal' : 'content'}

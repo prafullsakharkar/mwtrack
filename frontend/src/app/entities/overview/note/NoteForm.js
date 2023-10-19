@@ -1,5 +1,5 @@
-import FuseScrollbars from '@fuse/core/FuseScrollbars';
-import { useForm, useUpdateEffect } from '@fuse/hooks';
+import Scrollbars from '@/components/core/Scrollbars';
+import { useForm, useUpdateEffect } from '@/hooks';
 import _ from '@lodash';
 import AppBar from '@mui/material/AppBar';
 import Card from '@mui/material/Card';
@@ -22,7 +22,7 @@ import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import withRouter from '@fuse/core/withRouter';
+import withRouter from '@/components/core/withRouter';
 import { values } from 'lodash';
 const item = {
 	hidden: { opacity: 0, y: 40 },
@@ -119,12 +119,12 @@ function NoteForm(props) {
 	}
 
 	return (
-			<Card
-				component={motion.div}
-				variants={item}
-				className="w-full overflow-hidden rounded-16 shadow"
-			>
-				{/* {noteForm.preview && noteForm.preview !== '' && (
+		<Card
+			component={motion.div}
+			variants={item}
+			className="w-full overflow-hidden rounded-16 shadow"
+		>
+			{/* {noteForm.preview && noteForm.preview !== '' && (
 					<div className="relative">
 						<img src={noteForm.preview} className="w-full block" alt="note" />
 						<Fab
@@ -139,85 +139,85 @@ function NoteForm(props) {
 						</Fab>
 					</div>
 				)} */}
-				<div className="p-16 pb-12">
-					<Input
-						placeholder={props.type === 'Reply' ? 'Reply to a note..' : 'Take a note..'}
-						multiline
-						rows="4"
-						name="message"
-						value={noteForm.message}
-						onChange={handleChange}
-						disableUnderline
-						fullWidth
-						autoFocus
-					/>
-				</div>
-				{files.length > 0 && (
-					<ul className="py-8 px-16 flex flex-wrap list-reset">
-						{Array.from(files).map(item => (
-							<li key={item.name} className="flex items-center w-full">
-								<Icon color="action" className="text-16">
-									{item.type ? 'attachment' : 'photo'}
-								</Icon>
-								<Typography className={clsx('truncate mx-8')}
-								// color={item.checked ? 'textSecondary' : 'inherit'}
-								>
-									{item.name}
-								</Typography>
-								<IconButton
-									className="w-32 h-32 mx-4 p-0"
-									aria-label="Delete"
-									onClick={() => handleAttachmentRemove(item.name)}
-								>
-									<Icon fontSize="small">delete</Icon>
-								</IconButton>
-							</li>
-						))}
-					</ul>
-				)}
-				<AppBar
-					className="card-footer flex flex-row border-t-1"
-					position="static"
-					color="default"
-					elevation={0}
-				>
-					<div className="flex-1 items-center">
-						<Tooltip title="Add attachments" placement="bottom">
-							<div>
-								<label htmlFor="button-file">
-									<input accept="image/*" multiple className="hidden" id="button-file" type="file" onChange={handleUploadChange} />
-									<IconButton component="span">
-										<Icon>attachment</Icon>
-									</IconButton>
-								</label>
-							</div>
-						</Tooltip>
-					</div>
-
-					<div className="p-8">
-						{props.variant === 'new' ? (
-							<Button
-								className="m-4"
-								onClick={handleOnCreate}
-								variant="outlined"
-								size="small"
-								disabled={newFormButtonDisabled()}
+			<div className="p-16 pb-12">
+				<Input
+					placeholder={props.type === 'Reply' ? 'Reply to a note..' : 'Take a note..'}
+					multiline
+					rows="4"
+					name="message"
+					value={noteForm.message}
+					onChange={handleChange}
+					disableUnderline
+					fullWidth
+					autoFocus
+				/>
+			</div>
+			{files.length > 0 && (
+				<ul className="py-8 px-16 flex flex-wrap list-reset">
+					{Array.from(files).map(item => (
+						<li key={item.name} className="flex items-center w-full">
+							<Icon color="action" className="text-16">
+								{item.type ? 'attachment' : 'photo'}
+							</Icon>
+							<Typography className={clsx('truncate mx-8')}
+							// color={item.checked ? 'textSecondary' : 'inherit'}
 							>
-								{props.type === 'Reply' ? 'Reply' : 'Comment'}
+								{item.name}
+							</Typography>
+							<IconButton
+								className="w-32 h-32 mx-4 p-0"
+								aria-label="Delete"
+								onClick={() => handleAttachmentRemove(item.name)}
+							>
+								<Icon fontSize="small">delete</Icon>
+							</IconButton>
+						</li>
+					))}
+				</ul>
+			)}
+			<AppBar
+				className="card-footer flex flex-row border-t-1"
+				position="static"
+				color="default"
+				elevation={0}
+			>
+				<div className="flex-1 items-center">
+					<Tooltip title="Add attachments" placement="bottom">
+						<div>
+							<label htmlFor="button-file">
+								<input accept="image/*" multiple className="hidden" id="button-file" type="file" onChange={handleUploadChange} />
+								<IconButton component="span">
+									<Icon>attachment</Icon>
+								</IconButton>
+							</label>
+						</div>
+					</Tooltip>
+				</div>
+
+				<div className="p-8">
+					{props.variant === 'new' ? (
+						<Button
+							className="m-4"
+							onClick={handleOnCreate}
+							variant="outlined"
+							size="small"
+							disabled={newFormButtonDisabled()}
+						>
+							{props.type === 'Reply' ? 'Reply' : 'Comment'}
+						</Button>
+					) : (
+						<>
+							<Button className="m-4" onClick={handleOnChange} variant="outlined" size="small">
+								Edit
 							</Button>
-						) : (
-							<>
-								<Button className="m-4" onClick={handleOnChange} variant="outlined" size="small">
-									Edit
-								</Button>
-								<Button className="m-4" onClick={props.onClose} variant="outlined" size="small">
-									Close
-								</Button>
-							</>
-						)}
-					</div>
-				</AppBar>
-			</Card>
+							<Button className="m-4" onClick={props.onClose} variant="outlined" size="small">
+								Close
+							</Button>
+						</>
+					)}
+				</div>
+			</AppBar>
+		</Card>
 	);
 }
 

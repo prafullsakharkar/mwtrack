@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
-import history from "@history";
+import history from "@/history";
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -95,12 +95,12 @@ function EpisodesList(props) {
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/episode/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/episode/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)

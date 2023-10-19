@@ -2,17 +2,17 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { showMessage } from 'app/store/fuse/messageSlice';
+import { showMessage } from '@/stores/core/messageSlice';
 
-const url = '/api/v1/entity/asset/';
+const url = '/api/v1/entity/assets/';
 
 export const getAssets = createAsyncThunk(
-	'assetsApp/asset/getAssets',
+	'assetApp/asset/getAsset',
 	async (queryParams, { getState }) => {
 		const uid = queryParams?.uid
 		const entity = queryParams?.entity
 
-		const endPoint = (entity && uid) ? '/api/v1/entity/'+entity+'/'+uid+'/assets/' : url
+		const endPoint = (entity && uid) ? '/api/v1/entity/' + entity + '/' + uid + '/assets/' : url
 
 		delete queryParams?.uid
 		delete queryParams?.entity
@@ -29,7 +29,7 @@ export const getAssets = createAsyncThunk(
 );
 
 export const getAsset = createAsyncThunk(
-	'assetsApp/asset/getAsset', 
+	'assetApp/asset/getAsset',
 	async (routeParams, { dispatch, getState }) => {
 		routeParams = routeParams || getState().overviewApp.assets.routeParams;
 		const id = routeParams.uid
@@ -42,7 +42,7 @@ export const getAsset = createAsyncThunk(
 );
 
 export const addAsset = createAsyncThunk(
-	'assetsApp/asset/addAsset',
+	'assetApp/asset/addAsset',
 	async (asset, { dispatch, getState }) => {
 		const response = await axios.post(url, asset);
 		const data = await response.data;
@@ -52,7 +52,7 @@ export const addAsset = createAsyncThunk(
 );
 
 export const updateAsset = createAsyncThunk(
-	'assetsApp/asset/updateAsset',
+	'assetApp/asset/updateAsset',
 	async (asset, { dispatch, getState }) => {
 		const id = asset.id
 		delete asset['id']
@@ -63,8 +63,8 @@ export const updateAsset = createAsyncThunk(
 	}
 );
 
-export const updateMultipleAssets = createAsyncThunk(
-	'assetsApp/asset/updateMultipleAssets',
+export const updateMultipleAsset = createAsyncThunk(
+	'assetApp/asset/updateMultipleAsset',
 	async ({ multipleAssetList, project }, { dispatch, getState }) => {
 		const response = await axios.post('/api/v1/entity/project/' + project + '/asset_bulk_update/', multipleAssetList);
 		const data = await response.data;
@@ -74,7 +74,7 @@ export const updateMultipleAssets = createAsyncThunk(
 );
 
 export const removeAsset = createAsyncThunk(
-	'assetsApp/asset/removeAsset',
+	'assetApp/asset/removeAsset',
 	async (id, { dispatch, getState }) => {
 		return await axios.delete(url + id + '/')
 			.then((response) => {
@@ -83,12 +83,12 @@ export const removeAsset = createAsyncThunk(
 			})
 			.catch((response) => {
 				console.error(response)
-			})		
+			})
 	}
 );
 
 export const removeAssets = createAsyncThunk(
-	'assetsApp/asset/removeAssets',
+	'assetApp/asset/removeAsset',
 	async (entityIds, { dispatch, getState }) => {
 		confirmAlert({
 			title: 'Confirm to delete assets !!!',
@@ -100,7 +100,7 @@ export const removeAssets = createAsyncThunk(
 						entityIds.map(row => {
 							dispatch(removeAsset(row))
 						})
-						dispatch(showMessage({ message: 'Assets has been removed successfully !' }));
+						dispatch(showMessage({ message: 'Asset has been removed successfully !', veriant: 'success' }));
 
 					}
 				},
@@ -110,7 +110,7 @@ export const removeAssets = createAsyncThunk(
 				}
 			]
 		});
-		
+
 		return entityIds;
 	}
 );
@@ -120,12 +120,12 @@ const assetsAdapter = createEntityAdapter({
 	// sortComparer: (a, b) => b.created_at.localeCompare(a.created_at),
 });
 
-export const { selectAll: selectAssets, selectById: selectAssetById } = assetsAdapter.getSelectors(
-	state => state.assetsApp ? state.assetsApp.assets : state.overviewApp.assets
+export const { selectAll: selectAsset, selectById: selectAssetById } = assetsAdapter.getSelectors(
+	state => state.assetApp ? state.assetApp.assets : state.overviewApp.assets
 );
 
 const assetsSlice = createSlice({
-	name: 'assetsApp/assets',
+	name: 'assetApp/assets',
 	initialState: assetsAdapter.getInitialState({
 		totalCount: 0,
 		isLoading: true,
@@ -231,7 +231,7 @@ const assetsSlice = createSlice({
 	},
 	extraReducers: {
 		[removeAsset.fulfilled]: (state, action) => {
-			assetsAdapter.removeOne(state, action.payload)		
+			assetsAdapter.removeOne(state, action.payload)
 		},
 		[updateAsset.fulfilled]: (state, action) => {
 			if (action.payload.length > 0) {
@@ -250,17 +250,17 @@ const assetsSlice = createSlice({
 		[getAsset.fulfilled]: (state, action) => {
 			assetsAdapter.upsertOne(state, action.payload);
 		},
-		[getAssets.pending]: (state, action) => {
+		[getAsset.pending]: (state, action) => {
 			state.isLoading = true;
 			assetsAdapter.setAll(state, []);
 		},
-		[getAssets.fulfilled]: (state, action) => {
+		[getAsset.fulfilled]: (state, action) => {
 			const data = action.payload
-			assetsAdapter.setAll(state, data?.results || data );
+			assetsAdapter.setAll(state, data?.results || data);
 			state.totalCount = data?.count || data.length
 			state.isLoading = false;
 		},
-		[updateMultipleAssets.fulfilled]: (state, action) => {
+		[updateMultipleAsset.fulfilled]: (state, action) => {
 			assetsAdapter.upsertMany(state, action.payload)
 		},
 	}

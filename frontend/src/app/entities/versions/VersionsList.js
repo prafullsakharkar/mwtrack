@@ -16,7 +16,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import history from "@history";
+import history from "@/history";
 import Popover from '@mui/material/Popover';
 import format from 'date-fns/format';
 import { useParams, Link } from 'react-router-dom';
@@ -38,7 +38,7 @@ import {
 	openMultipleVersionDialog,
 } from './store/versionsSlice';
 
-import LightBoxImageList from "app/shared-components/image/LightBoxImageList";
+import LightBoxImageList from "@/components/core/image/LightBoxImageList";
 
 function VersionsList(props) {
 	const dispatch = useDispatch();
@@ -93,21 +93,21 @@ function VersionsList(props) {
 				header: '#',
 				accessorKey: 'uid',
 				Cell: ({ row }) => (
-					<Typography 
+					<Typography
 						className="cursor-pointer"
 						onClick={(event) => {
-						event.preventDefault();
-						history.push("/entity/version/" + row.original.uid + "/overview");
-					}}>
+							event.preventDefault();
+							history.push("/entity/version/" + row.original.uid + "/overview");
+						}}>
 						{row.original.uid}
 					</Typography>
 				)
 			},
 			{
-				header    : "Media Files",
-				accessorKey  : "media_files",
-				Cell     : ({ cell }) => (
-					cell.getValue() ? (<LightBoxImageList media_files={cell.getValue()}/>) : null)           
+				header: "Media Files",
+				accessorKey: "media_files",
+				Cell: ({ cell }) => (
+					cell.getValue() ? (<LightBoxImageList media_files={cell.getValue()} />) : null)
 			},
 			{
 				header: 'Name',
@@ -120,9 +120,9 @@ function VersionsList(props) {
 			{
 				header: 'Status',
 				accessorKey: 'status',
-				Cell: ({ cell }) => (                  
-				  <Button size="small" variant="outlined" sx={{ color : cell.getValue()?.color }}>
-						{ cell.getValue()?.name }
+				Cell: ({ cell }) => (
+					<Button size="small" variant="outlined" sx={{ color: cell.getValue()?.color }}>
+						{cell.getValue()?.name}
 					</Button>
 				),
 			},
@@ -182,7 +182,7 @@ function VersionsList(props) {
 				enableRowSelection
 				enableStickyHeader
 				enableStickyFooter
-				
+
 				enableColumnFilters={false}
 				manualFiltering
 				manualPagination

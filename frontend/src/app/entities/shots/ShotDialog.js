@@ -1,5 +1,5 @@
-import { useForm } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils/FuseUtils';
+import { useForm } from '@/hooks';
+import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -32,9 +32,9 @@ import {
 	updateMultipleShots,
 } from './store/shotsSlice';
 
-import { getEpisodes } from 'src/app/main/apps/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/main/apps/entities/sequences/store/sequencesSlice';
-import AtomUploadXls from 'app/shared-components/xls_table/AtomUploadXls';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
+import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_shot.csv';
 import SampleUpdateCsv from './sample/sample_update_shot.csv';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import format from 'date-fns/format';
 import { useDispatch, useSelector } from 'react-redux';
 import { openEditGroupDialog, removeGroup, selectGroups } from './store/groupSlice';
-import MuiTable from '@/components/core/MuiTable';
+import MuiTable from '@/components/core/Table/MuiTable';
 import { Typography } from '@mui/material';
 import SvgIcon from '@/components/core/SvgIcon';
 import { Box, IconButton, Button } from '@mui/material';

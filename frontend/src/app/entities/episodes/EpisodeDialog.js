@@ -1,5 +1,5 @@
-import { useForm } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils/FuseUtils';
+import { useForm } from '@/hooks';
+import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -31,7 +31,7 @@ import {
 	closeCsvUpdateDialog,
 	updateMultipleEpisodes,
 } from './store/episodesSlice';
-import AtomUploadXls from 'app/shared-components/xls_table/AtomUploadXls';
+import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_episode.csv';
 import SampleUpdateCsv from './sample/sample_update_episode.csv';
 
@@ -207,7 +207,7 @@ function EpisodeDialog(props) {
 				changedValues.uid = item
 				return changedValues
 			})
-			dispatch(updateMultipleEpisodes({ multipleEpisodeList:formData, project }));
+			dispatch(updateMultipleEpisodes({ multipleEpisodeList: formData, project }));
 		} else if (episodeDialog.type === 'new') {
 			const episodesData = Object.entries(episodes).filter(([key, value]) => value === true).map(([key, value]) => {
 				return { ...form, ...{ "name": key } }

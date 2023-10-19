@@ -8,12 +8,12 @@ import history from '@/history';
 import { Link } from 'react-router-dom';
 import SvgIcon from '@/components/core/SvgIcon';
 import NavLinkAdapter from '@/components/core/NavLinkAdapter';
-import { setProjectSearchText, selectProjectSearchText } from './store/projectSlice';
+import { Avatar } from '@mui/material';
 
-function ProjectsHeader(props) {
+function OverviewHeader(props) {
   const dispatch = useDispatch();
-  const searchText = useSelector(selectProjectSearchText);
   const { pathname } = history.location;
+  const data = props.data
 
   return (
     <div className="flex flex-col">
@@ -32,18 +32,18 @@ function ProjectsHeader(props) {
             <Avatar
               sx={{ borderColor: 'background.paper' }}
               className="ml-16 w-160 h-128 border-4 rounded-16"
-              src={data?.thumbnail || "static/images/thumbnail/no_entity_thumbnail.jpg"}
+              src={data?.thumbnail || "assets/images/no_entity_thumbnail.jpg"}
               alt="Thumbnail"
             />
           </motion.div>
         </div>
 
-        <EntityHeader />
+        {/* <EntityHeader /> */}
 
       </div>
     </div>
   );
 }
 
-export default ProjectsHeader;
+export default OverviewHeader;
 
