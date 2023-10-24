@@ -60,7 +60,12 @@ function ProjectList(props) {
 		</div>
 	) : (
 		<div>
-			<motion.div variants={container} initial="hidden" animate="show" className="w-full">
+			<motion.div
+				initial={{ opacity: 0, y: 40 }}
+				animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
+				variants={container}
+				className="w-full"
+			>
 				<div className="md:flex">
 					<div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
 						<div className="p-32">

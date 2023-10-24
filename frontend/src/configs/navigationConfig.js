@@ -6,7 +6,7 @@ const navigationConfig = [
     type: 'group',
     icon: 'material-outline:assignment_ind',
     url: '/taskboard',
-    auth: authRoles.artist,
+    // auth: authRoles.artist,
   },
   {
     id: 'accounts',
@@ -86,14 +86,6 @@ const navigationConfig = [
         auth: authRoles.developer,
       },
     ]
-  },
-  {
-    id: 'example-component',
-    title: 'Example',
-    translate: 'EXAMPLE',
-    type: 'item',
-    icon: 'heroicons-outline:star',
-    url: 'example',
   },
 ];
 

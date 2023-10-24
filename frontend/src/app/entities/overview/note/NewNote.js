@@ -1,6 +1,6 @@
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
 import Icon from '@mui/material/Icon';
@@ -14,7 +14,7 @@ import NoteForm from './NoteForm';
 import { addNote, replyNote } from 'src/app/entities/notes/store/noteSlice';
 import axios from 'axios';
 
-const useStyles = makeStyles({
+const useStyles = styled({
 	button: {
 		cursor: 'text'
 	}

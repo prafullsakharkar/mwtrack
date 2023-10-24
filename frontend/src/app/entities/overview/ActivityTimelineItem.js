@@ -7,12 +7,9 @@ import {
 } from '@mui/lab';
 import SvgIcon from '@/components/core/SvgIcon';
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import format from 'date-fns/format';
-import { Link } from 'react-router-dom';
-import { lighten } from '@mui/material/styles';
 
 function ActivityTimelineItem({ item, last }) {
   return (

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import SvgIcon from '@/components/core/SvgIcon';
 import NavLinkAdapter from '@/components/core/NavLinkAdapter';
 import { Avatar } from '@mui/material';
+import EntityHeader from '@/components/core/Header/EntityHeader';
 
 function OverviewHeader(props) {
   const dispatch = useDispatch();
@@ -18,9 +19,8 @@ function OverviewHeader(props) {
   return (
     <div className="flex flex-col">
       <img
-        className="h-160 md:h-240 xl:h-320 object-cover w-full"
-        src="static/images/pages/profile/entity_cover.jpg"
-        alt="Overview Cover"
+        className="h-160 object-cover w-full"
+        src="assets/images/cover/entity_cover.jpg"
       />
       {/* <video width="100%" height="240" src="static/images/pages/profile/cover.mp4" controls>
               Your browser does not support the video tag.
@@ -32,13 +32,12 @@ function OverviewHeader(props) {
             <Avatar
               sx={{ borderColor: 'background.paper' }}
               className="ml-16 w-160 h-128 border-4 rounded-16"
-              src={data?.thumbnail || "assets/images/no_entity_thumbnail.jpg"}
-              alt="Thumbnail"
+              src={data?.thumbnail || "assets/images/thumbnail/no_entity_thumbnail.jpg"}
             />
           </motion.div>
         </div>
 
-        {/* <EntityHeader /> */}
+        <EntityHeader />
 
       </div>
     </div>

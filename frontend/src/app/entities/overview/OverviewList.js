@@ -1,4 +1,4 @@
-import Scrollbars from '@/components/core/Scrollbars';
+import CustomScrollbars from '@/components/core/CustomScrollbars';
 import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
@@ -46,7 +46,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import NewNote from './note/NewNote';
 import SingleLineImageList from '@/components/core/Image/SingleLineImageList';
 import { getNotes, selectNotes } from 'src/app/entities/notes/store/noteSlice';
-import { getActivities, selectActivities } from 'src/app/tools/activities/store/activitiesSlice';
+// import { getActivities, selectActivities } from 'src/app/tools/activities/store/activitiesSlice';
 import NoteCard from './note/NoteCard';
 
 function OverviewList(props) {
@@ -68,8 +68,9 @@ function OverviewList(props) {
   const [start, setStart] = useState(0)
   const stopLoadingNotes = (notesCount <= notes.length)
 
-  const activitiesCount = useSelector(({ overviewApp }) => overviewApp.activities.totalCount);
-  const actsData = useSelector(selectActivities);
+  const activitiesCount = 0;
+  // const activitiesCount = 0 || useSelector(({ overviewApp }) => overviewApp.activities.totalCount);
+  // const actsData = useSelector(selectActivities);
   const [isLoadingAct, setIsLoadingAct] = useState(false)
   const [activities, setActivities] = useState([])
   const [startAct, setStartAct] = useState(0)
@@ -128,21 +129,21 @@ function OverviewList(props) {
     return () => element?.removeEventListener('scroll', handleActivityScroll);
   }, [stopLoadingActs]);
 
-  useEffect(() => {
-    setIsLoadingAct(true)
-    startAct === 0 && setActivities([])
-    const queryActParams = {
-      page_size: pageSize,
-      start: startAct,
-    }
-    queryActParams[routeParams.entity] = routeParams.uid
-    dispatch(getActivities(queryActParams))
-  }, [startAct, routeParams])
+  // useEffect(() => {
+  //   setIsLoadingAct(true)
+  //   startAct === 0 && setActivities([])
+  //   const queryActParams = {
+  //     page_size: pageSize,
+  //     start: startAct,
+  //   }
+  //   queryActParams[routeParams.entity] = routeParams.uid
+  //   dispatch(getActivities(queryActParams))
+  // }, [startAct, routeParams])
 
-  useEffect(() => {
-    actsData.length > 0 && setActivities([...activities, ...actsData])
-    setIsLoadingAct(false);
-  }, [actsData])
+  // useEffect(() => {
+  //   actsData.length > 0 && setActivities([...activities, ...actsData])
+  //   setIsLoadingAct(false);
+  // }, [actsData])
 
   const container = {
     show: {
@@ -161,7 +162,7 @@ function OverviewList(props) {
     <motion.div variants={container} initial="hidden" animate="show" className="w-full">
       <div className="md:flex">
 
-        <div className="flex flex-col flex-1 md:ltr:mr-16 md:rtl:ml-16">
+        <div className="flex flex-col flex-1 md:ltr: mr-16 md:rtl:ml-16">
           <NewNote />
 
           {notes.length > 0 && notes.map((note, index) => (
@@ -190,7 +191,7 @@ function OverviewList(props) {
                   },
                 }}
               >
-                <Scrollbars className="grow overflow-auto max-h-480" id="div-activities" >
+                <CustomScrollbars className="grow overflow-auto max-h-480" id="div-activities" >
                   {activities?.map((item, index) => (
                     <ActivityTimelineItem
                       last={activities.length === index + 1}
@@ -198,7 +199,7 @@ function OverviewList(props) {
                       key={'acts-' + index}
                     />
                   ))}
-                </Scrollbars>
+                </CustomScrollbars>
                 {isLoadingAct && (<Box className='flex items-center flex-row justify-center mb-12'>
                   <CircularProgress color="secondary" />
                 </Box>)}

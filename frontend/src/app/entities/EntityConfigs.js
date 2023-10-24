@@ -32,6 +32,10 @@ const EntityConfigs = {
       ],
     },
     {
+      path: 'taskboard',
+      element: <Navigate to="/pages/comming-soon" />
+    },
+    {
       path: 'entity/:entity/:uid/overview',
       element: <Overview />,
     },

@@ -245,7 +245,7 @@ function Error404Page() {
         </motion.div>
 
         <Link className="block font-normal mt-48" to="/">
-          Back to Dashboard
+          Back To Home Page
         </Link>
       </div>
     </div>

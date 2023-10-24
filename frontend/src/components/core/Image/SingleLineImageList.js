@@ -1,11 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = styled((theme) => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   imageList: {
     flexWrap: 'nowrap',
-    
+
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
   },
@@ -55,10 +55,10 @@ export default function SingleLineImageList(props) {
         {itemData.map((item) => (
           <ImageListItem key={item.id}>
             <img
-              src={item.url} 
+              src={item.url}
               alt={item.name}
-							className="w-full max-h-96 rounded-16"
-							loading="lazy"
+              className="w-full max-h-96 rounded-16"
+              loading="lazy"
             />
             {/* <img 
               src={"http://localhost:8000"+item.url} 

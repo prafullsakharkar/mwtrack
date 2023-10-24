@@ -42,6 +42,11 @@ function SignInPage() {
 
   const { isValid, dirtyFields, errors } = formState;
 
+  useEffect(() => {
+    setValue('email', 'admin@example.com', { shouldDirty: true, shouldValidate: true });
+    setValue('password', 'Admin@123', { shouldDirty: true, shouldValidate: true });
+  }, [setValue]);
+
   function onSubmit({ email, password }) {
     jwtService
       .signInWithEmailAndPassword(email, password)
@@ -189,7 +194,7 @@ function SignInPage() {
                   Sign in
                 </Button>
 
-                <div className="flex items-center mt-16">
+                {/* <div className="flex items-center mt-16">
                   <div className="flex-auto mt-px border-t" />
                   <div className="flex items-baseline mt-2 font-medium">
                     <Typography>Don't have an account?</Typography>
@@ -198,7 +203,7 @@ function SignInPage() {
                     </Link>
                   </div>
                   <div className="flex-auto mt-px border-t" />
-                </div>
+                </div> */}
               </form>
             </div>
           </Paper>
