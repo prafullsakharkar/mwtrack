@@ -7,7 +7,6 @@ import { useDeepCompareEffect } from '@/hooks';
 import { styled } from '@mui/material/styles';
 import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import ProjectSidebarContent from './ProjectSidebar';
-import ProjectHeader from './ProjectHeader';
 import ProjectList from './ProjectList';
 import reducer from './store';
 import { getUsers } from 'src/app/accounts/users/store/userSlice';
@@ -41,7 +40,7 @@ function ProjectApp(props) {
 	}, [dispatch]);
 
 	useEffect(() => {
-		setRightSidebarOpen(Boolean(routeParams.id));
+		setRightSidebarOpen(Boolean(routeParams.uid));
 	}, [routeParams]);
 
 	return (

@@ -23,7 +23,7 @@ const StyledListItem = styled(ListItem)(({ theme, active }) => ({
   marginBottom: 8,
   fontWeight: 500,
   '&.active': {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: "#0c5680",
     pointerEvents: 'none',
     '& .list-item-icon': {
       color: theme.palette.secondary.main,
@@ -53,24 +53,24 @@ function EntityHeader(props) {
     if (routeParams.entity === 'project') {
       if (projects[project]?.is_episodic) {
         setListEntities([
-          "overview", "notes", "assets", "episodes", "sequences", "shots", "steps", "tasks", "versions", "publishes"
+          "overview", "notes", "assets", "episodes", "sequences", "shots", "steps", "tasks", "versions",
         ])
       } else {
         setListEntities([
-          "overview", "notes", "assets", "sequences", "shots", "steps", "tasks", "versions", "publishes"
+          "overview", "notes", "assets", "sequences", "shots", "steps", "tasks", "versions",
         ]);
       }
     }
 
-    if (routeParams.entity === 'asset') setListEntities(["overview", "notes", "steps", "tasks", "versions", "publishes"]);
+    if (routeParams.entity === 'asset') setListEntities(["overview", "notes", "steps", "tasks", "versions",]);
     if (routeParams.entity === 'episode') setListEntities([
-      "overview", "notes", "sequences", "shots", "steps", "tasks", "versions", "publishes"
+      "overview", "notes", "sequences", "shots", "steps", "tasks", "versions",
     ]);
-    if (routeParams.entity === 'sequence') setListEntities(["overview", "notes", "shots", "steps", "tasks", "versions", "publishes"]);
-    if (routeParams.entity === 'shot') setListEntities(["overview", "notes", "steps", "tasks", "versions", "publishes"]);
-    if (routeParams.entity === 'step') setListEntities(["overview", "notes", "tasks", "versions", "publishes"]);
-    if (routeParams.entity === 'task') setListEntities(["overview", "notes", "versions", "publishes"]);
-    if (routeParams.entity === 'version') setListEntities(["overview", "notes", "publishes"]);
+    if (routeParams.entity === 'sequence') setListEntities(["overview", "notes", "shots", "steps", "tasks", "versions",]);
+    if (routeParams.entity === 'shot') setListEntities(["overview", "notes", "steps", "tasks", "versions",]);
+    if (routeParams.entity === 'step') setListEntities(["overview", "notes", "tasks", "versions",]);
+    if (routeParams.entity === 'task') setListEntities(["overview", "notes", "versions",]);
+    if (routeParams.entity === 'version') setListEntities(["overview", "notes",]);
 
   }, [routeParams, projects])
 

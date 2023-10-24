@@ -16,12 +16,12 @@ import EntityHeader from '@/components/core/header/EntityHeader';
 import useThemeMediaQuery from '@/hooks/useThemeMediaQuery';
 import { getProject, selectProjectById } from 'src/app/entities/projects/store/projectsSlice';
 import { getAsset, selectAssetById } from 'src/app/entities/assets/store/assetsSlice';
-import { getEpisode, selectEpisodeById } from 'src/app/entities/episodes/store/episodesSlice';
-import { getSequence, selectSequenceById } from 'src/app/entities/sequences/store/sequencesSlice';
-import { getShot, selectShotById } from 'src/app/entities/shots/store/shotsSlice';
-import { getStep, selectStepById } from 'src/app/entities/steps/store/stepsSlice';
-import { getTask, selectTaskById } from 'src/app/entities/tasks/store/tasksSlice';
-import { getVersion, selectVersionById } from 'src/app/entities/versions/store/versionsSlice';
+import { getEpisode, selectEpisodeById } from 'src/app/entities/episodes/store/episodeSlice';
+import { getSequence, selectSequenceById } from 'src/app/entities/sequences/store/sequenceSlice';
+import { getShot, selectShotById } from 'src/app/entities/shots/store/shotSlice';
+import { getStep, selectStepById } from 'src/app/entities/steps/store/stepSlice';
+import { getTask, selectTaskById } from 'src/app/entities/tasks/store/taskSlice';
+import { getVersion, selectVersionById } from 'src/app/entities/versions/store/versionSlice';
 
 import NoteDialog from '../notes/NoteDialog';
 

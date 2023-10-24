@@ -35,6 +35,7 @@ function AuthProvider({ children }) {
 
     jwtService.on('onLogin', (user) => {
       success(user, 'Hey, You have been signed in!');
+      dispatch(getProjects())
     });
 
     jwtService.on('onLogout', () => {

@@ -2,7 +2,7 @@ import datetime
 import os
 from uuid import uuid4
 
-from apis.utilities.models import Status
+from apis.utilities.models import FileUpload, Status
 from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
@@ -15,7 +15,7 @@ class BaseFields(models.Model):
     uid = models.CharField(primary_key=True, max_length=255, default=None)
     name = models.CharField(max_length=200, blank=False, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now())
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     REQUIRED_FIELDS = ["name"]
 
@@ -27,7 +27,7 @@ class BaseFields(models.Model):
 def get_project_thumbnail_path(instance, filename):
     ext = filename.split(".")[-1]
     filename = f"{instance.code}.{ext}" if instance.code else f"{uuid4().hex}.{ext}"
-    return os.path.join("project_thumbnails", filename)
+    return os.path.join("project_pics", filename)
 
 
 class Project(BaseFields):
@@ -185,8 +185,8 @@ class Step(BaseFields):
         return f"Step: {self.uid}"
 
     @property
-    def bid(self):
-        return sum(self.step_users.values_list("bid", flat=True))
+    def bid_days(self):
+        return round(sum(self.step_users.values_list("bid", flat=True)) / (8 * 60), 2)
 
     @property
     def users(self):
@@ -218,7 +218,7 @@ class Task(BaseFields):
         ("high", "high"),
     ]
 
-    version = models.IntegerField(default=1, blank=False)
+    version_number = models.IntegerField(default=1, blank=False)
     entity_type = models.CharField(max_length=15, default="Task")
     status = models.ForeignKey(to=Status, null=True, on_delete=models.SET_NULL)
     priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default="low")
@@ -234,7 +234,7 @@ class Task(BaseFields):
     shot = models.ForeignKey(to=Shot, null=True, on_delete=models.CASCADE)
     step = models.ForeignKey(to=Step, null=True, on_delete=models.CASCADE)
 
-    REQUIRED_FIELDS = ["version", "step"]
+    REQUIRED_FIELDS = ["version_number", "step"]
 
     def __str__(self):
         return f"Task: {self.uid}"
@@ -244,12 +244,12 @@ class Task(BaseFields):
         return self.task_users.values_list("user", flat=True)
 
     @property
-    def bid(self):
-        return sum(self.task_users.values_list("bid", flat=True))
+    def bid_days(self):
+        return round(sum(self.task_users.values_list("bid", flat=True)) / (8 * 60), 2)
 
     def save(self, *args, **kwargs):
         if not self.uid:
-            self.name = "Task_v" + str(self.version)
+            self.name = "Task_v" + str(self.version_number)
             self.uid = self.step.uid + ":" + self.name
 
         super(Task, self).save(*args, **kwargs)
@@ -274,3 +274,83 @@ class UserTask(models.Model):
 
     def __str__(self):
         return f"UserTask {self.user.username}"
+
+
+class Version(BaseFields):
+    version_number = models.IntegerField(default=1, blank=False)
+    status = models.ForeignKey(to=Status, null=True, on_delete=models.SET_NULL)
+    entity_type = models.CharField(max_length=20, default="Version")
+    media_files = models.ManyToManyField(
+        to=FileUpload, blank=True, related_name="review_files", default=[]
+    )
+    description = models.TextField(blank=True, null=True)
+    created_by = models.ForeignKey(
+        to=User, related_name="version_created_by", null=True, on_delete=models.SET_NULL
+    )
+    updated_by = models.ForeignKey(
+        to=User, related_name="version_updated_by", null=True, on_delete=models.SET_NULL
+    )
+
+    project = models.ForeignKey(to=Project, null=True, on_delete=models.CASCADE)
+    asset = models.ForeignKey(to=Asset, null=True, on_delete=models.CASCADE)
+    episode = models.ForeignKey(to=Episode, null=True, on_delete=models.CASCADE)
+    sequence = models.ForeignKey(to=Sequence, null=True, on_delete=models.CASCADE)
+    shot = models.ForeignKey(to=Shot, null=True, on_delete=models.CASCADE)
+    step = models.ForeignKey(to=Step, null=True, on_delete=models.CASCADE)
+    task = models.ForeignKey(to=Task, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f"Version {self.uid}"
+
+    def save(self, *args, **kwargs):
+        if not self.uid:
+            self.name = "Review_v" + str(self.version_number)
+            self.uid = self.step.uid + ":" + self.name
+
+        super(Version, self).save(*args, **kwargs)
+
+
+class Note(models.Model):
+    message = models.TextField(blank=False)
+    entity_type = models.CharField(max_length=20, default="Note")
+    attachments = models.ManyToManyField(to=FileUpload, blank=True, default=[])
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now())
+    created_by = models.ForeignKey(
+        to=User, related_name="note_created_by", null=True, on_delete=models.SET_NULL
+    )
+    updated_by = models.ForeignKey(
+        to=User, related_name="note_updated_by", null=True, on_delete=models.SET_NULL
+    )
+
+    project = models.ForeignKey(to=Project, null=True, on_delete=models.CASCADE)
+    asset = models.ForeignKey(to=Asset, null=True, on_delete=models.CASCADE)
+    episode = models.ForeignKey(to=Episode, null=True, on_delete=models.CASCADE)
+    sequence = models.ForeignKey(to=Sequence, null=True, on_delete=models.CASCADE)
+    shot = models.ForeignKey(to=Shot, null=True, on_delete=models.CASCADE)
+    step = models.ForeignKey(to=Step, null=True, on_delete=models.CASCADE)
+    task = models.ForeignKey(to=Task, null=True, on_delete=models.CASCADE)
+    version = models.ForeignKey(to=Version, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    @property
+    def replies(self):
+        return self.reply_set.all()
+
+
+class Reply(models.Model):
+    message = models.TextField(blank=False)
+    entity_type = models.CharField(max_length=20, default="Reply")
+    attachments = models.ManyToManyField(to=FileUpload, blank=True, default=[])
+    note = models.ForeignKey(to=Note, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Project, null=True, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now())
+    created_by = models.ForeignKey(
+        to=User, related_name="reply_created_by", null=True, on_delete=models.SET_NULL
+    )
+    updated_by = models.ForeignKey(
+        to=User, related_name="reply_updated_by", null=True, on_delete=models.SET_NULL
+    )

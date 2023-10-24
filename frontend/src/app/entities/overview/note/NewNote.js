@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import NoteForm from './NoteForm';
-import { addNote, replyNote } from 'src/app/entities/notes/store/notesSlice';
+import { addNote, replyNote } from 'src/app/entities/notes/store/noteSlice';
 import axios from 'axios';
 
 const useStyles = makeStyles({
@@ -47,7 +47,7 @@ function NewNote(props) {
 
 	async function setNoteEntities(note) {
 		try {
-			const response = await axios.get('/api/v1/entity/' + routeParams.entity + '/' + routeParams.uid + '/');
+			const response = await axios.get('/api/v1/entity/' + routeParams.entity + 's/' + routeParams.uid + '/');
 			const data = await response.data;
 
 			if (data.asset) { note.asset = data.asset }

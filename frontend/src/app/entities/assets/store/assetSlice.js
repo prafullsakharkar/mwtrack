@@ -12,18 +12,20 @@ export const getAssets = createAsyncThunk(
 		const uid = queryParams?.uid
 		const entity = queryParams?.entity
 
-		const endPoint = (entity && uid) ? '/api/v1/entity/' + entity + '/' + uid + '/assets/' : url
+		const endPoint = (entity && uid) ? '/api/v1/entity/' + entity + 's/' + uid + '/assets/' : url
 
-		delete queryParams?.uid
-		delete queryParams?.entity
+		const params = { ...queryParams }
+		delete params?.uid
+		delete params?.entity
 
-		return await axios.get(endPoint, { params: queryParams })
+		return await axios.get(endPoint, { params: params })
 			.then((response) => {
 				const data = response.data;
 				return data;
 			})
 			.catch((response) => {
 				console.error(response)
+				return []
 			})
 	}
 );
@@ -66,7 +68,7 @@ export const updateAsset = createAsyncThunk(
 export const updateMultipleAsset = createAsyncThunk(
 	'assetApp/asset/updateMultipleAsset',
 	async ({ multipleAssetList, project }, { dispatch, getState }) => {
-		const response = await axios.post('/api/v1/entity/project/' + project + '/asset_bulk_update/', multipleAssetList);
+		const response = await axios.post('/api/v1/entity/projects/' + project + '/asset_bulk_update/', multipleAssetList);
 		const data = await response.data;
 
 		return data;
@@ -101,7 +103,7 @@ export const removeAssets = createAsyncThunk(
 							dispatch(removeAsset(row))
 						})
 						dispatch(showMessage({ message: 'Asset has been removed successfully !', veriant: 'success' }));
-
+						return entityIds;
 					}
 				},
 				{
@@ -111,7 +113,6 @@ export const removeAssets = createAsyncThunk(
 			]
 		});
 
-		return entityIds;
 	}
 );
 

@@ -1,5 +1,4 @@
 import { useForm } from '@/hooks';
-import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -9,17 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { useParams } from 'react-router-dom';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
 import diff from 'object-diff';
-import _ from '@lodash';
+import _ from '@/lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	removeStep,
+	removeSteps,
 	updateStep,
 	addSteps,
 	closeNewStepDialog,
@@ -28,21 +25,20 @@ import {
 	closeCsvUpdateDialog,
 	closeMultipleStepDialog,
 	updateMultipleSteps,
-} from './store/stepsSlice';
+} from './store/stepSlice';
 
-import { getAsset } from 'src/app/entities/assets/store/assetsSlice';
-import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
-import { getShots } from 'src/app/entities/shots/store/shotsSlice';
-import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
+import { getAssets } from 'src/app/entities/assets/store/assetSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodeSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequenceSlice';
+import { getShots } from 'src/app/entities/shots/store/shotSlice';
+import { getUtilSteps } from 'src/app/utilities/util-steps/store/utilStepSlice';
 
-import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
+// import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_step.csv';
 import SampleUpdateCsv from './sample/sample_update_step.csv';
 
 const defaultFormState = {
 	status: null,
-	priority: null,
 };
 
 function StepDialog(props) {
@@ -51,7 +47,6 @@ function StepDialog(props) {
 
 	const stepDialog = props.stepDialog;
 	const statuses = props.statuses;
-	const priorities = props.priorities;
 
 	const episodeIds = props.episodeIds;
 	const sequenceIds = props.sequenceIds;
@@ -68,7 +63,7 @@ function StepDialog(props) {
 
 	const [assetType, setAssetType] = useState(null)
 	const assetTypes = ["Set", "Prop", "Character", "Vehicle", "Fx"]
-	const projects = useSelector(({ fuse }) => fuse.projects.entities)
+	const projects = useSelector(({ core }) => core.projects.entities)
 	const project = routeParams?.uid?.split(':')[0].toLowerCase()
 	const is_episodic = projects && projects[project]?.is_episodic
 
@@ -96,10 +91,6 @@ function StepDialog(props) {
 			const status = statuses ? _.find(statuses, { name: "Ready To Start" }) : null
 			if (status) {
 				requestData.status = status.id
-			}
-			const priority = item.priority && priorities ? _.find(priorities, { name: item.priority }) : _.find(priorities, { name: "Low" })
-			if (priority) {
-				requestData.priority = priority.id
 			}
 
 			const step = item.shot ? item.shot + ':' + item.name : item.asset + ':' + item.name
@@ -146,13 +137,6 @@ function StepDialog(props) {
 				requestData.status = status.id
 			} else if (item.status) {
 				item.reason = "Invalid Status"
-				item.valid = false
-			}
-			const priority = item.priority && priorities ? _.find(priorities, { name: item.priority }) : null
-			if (priority) {
-				requestData.priority = priority.id
-			} else if (item.priority) {
-				item.reason = "Invalid Priority"
 				item.valid = false
 			}
 			if (item.valid) {
@@ -227,7 +211,7 @@ function StepDialog(props) {
 				uid: project,
 				entity: "project"
 			}
-			dispatch(getAsset(params));
+			dispatch(getAssets(params));
 		}
 	}, [assetType]);
 
@@ -339,7 +323,7 @@ function StepDialog(props) {
 							<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateStep.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvCreate} />
+							{/* <AtomUploadXls validate={validateCsvCreate} /> */}
 						</>
 					)}
 					{stepDialog.type === 'csvUpdate' && (
@@ -347,7 +331,7 @@ function StepDialog(props) {
 							<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateStep.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvUpdate} />
+							{/* <AtomUploadXls validate={validateCsvUpdate} /> */}
 						</>
 					)}
 					{stepDialog.type === 'edit' && (
@@ -470,20 +454,6 @@ function StepDialog(props) {
 								id="status"
 								options={Object.values(statuses)}
 								renderInput={(params) => <TextField {...params} label="Status" required variant="outlined" />}
-
-							/>
-						</div>
-						<div className="flex-1">
-							<Autocomplete
-								value={form.priority && priorities[form.priority?.id || form.priority]}
-								onChange={(event, newValue) => {
-									setInForm('priority', newValue.id)
-								}}
-								disableClearable
-								getOptionLabel={option => option.name}
-								id="priority"
-								options={Object.values(priorities)}
-								renderInput={(params) => <TextField {...params} label="Priority" required variant="outlined" />}
 
 							/>
 						</div>

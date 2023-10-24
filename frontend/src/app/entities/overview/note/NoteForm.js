@@ -1,6 +1,6 @@
 import Scrollbars from '@/components/core/Scrollbars';
 import { useForm, useUpdateEffect } from '@/hooks';
-import _ from '@lodash';
+import _ from '@/lodash';
 import AppBar from '@mui/material/AppBar';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';

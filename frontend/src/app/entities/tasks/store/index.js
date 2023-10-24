@@ -1,14 +1,13 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import tasks from './tasksSlice';
-import episodes from 'src/app/entities/episodes/store/episodesSlice';
-import sequences from 'src/app/entities/sequences/store/sequencesSlice';
-import shots from 'src/app/entities/shots/store/shotsSlice';
-import steps from 'src/app/entities/steps/store/stepsSlice';
-import assets from 'src/app/entities/assets/store/assetsSlice';
-import status from 'src/app/utilities/statuses/store/statusesSlice';
-import priorities from 'src/app/utilities/priorities/store/prioritiesSlice';
+import tasks from './taskSlice';
+import episodes from 'src/app/entities/episodes/store/episodeSlice';
+import sequences from 'src/app/entities/sequences/store/sequenceSlice';
+import shots from 'src/app/entities/shots/store/shotSlice';
+import steps from 'src/app/entities/steps/store/stepSlice';
+import assets from 'src/app/entities/assets/store/assetSlice';
+import status from 'src/app/utilities/statuses/store/statusSlice';
 import users from 'src/app/accounts/users/store/userSlice';
-import utilSteps from 'src/app/utilities/steps/store/stepsSlice';
+import utilSteps from 'src/app/utilities/util-steps/store/utilStepSlice';
 
 const reducer = combineReducers({
 	tasks,
@@ -16,7 +15,6 @@ const reducer = combineReducers({
 	sequences,
 	shots,
 	status,
-	priorities,
 	steps,
 	assets,
 	users,

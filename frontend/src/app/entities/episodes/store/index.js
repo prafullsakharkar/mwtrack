@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import episodes from './episodesSlice';
+import episodes from './episodeSlice';
 
 const reducer = combineReducers({
 	episodes,

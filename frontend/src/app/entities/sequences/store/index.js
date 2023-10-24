@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import sequences from './sequencesSlice';
-import episodes from 'src/app/entities/episodes/store/episodesSlice';
+import sequences from './sequenceSlice';
+import episodes from 'src/app/entities/episodes/store/episodeSlice';
 
 const reducer = combineReducers({
 	sequences,

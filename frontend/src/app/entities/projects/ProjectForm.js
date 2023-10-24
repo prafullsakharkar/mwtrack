@@ -52,7 +52,7 @@ function ProjectForm(props) {
   const routeParams = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const project = useSelector((state) => selectProjectById(state, routeParams.id)) || null;
+  const project = useSelector((state) => selectProjectById(state, routeParams.uid)) || null;
   const users = useSelector(({ projectApp }) => projectApp.users.entities);
 
   const { control, watch, reset, handleSubmit, formState, getValues, setValue } = useForm({
@@ -70,7 +70,7 @@ function ProjectForm(props) {
    * Form Submit
    */
   function onSubmit(data) {
-    if (routeParams.id === 'new') {
+    if (routeParams.uid === 'new') {
       dispatch(addProject(data)).then(() => navigate("/projects"));
     } else {
       const changedValues = diff(project, data)
@@ -106,7 +106,7 @@ function ProjectForm(props) {
 
 
   useEffect(() => {
-    reset((routeParams.id == "new") ? defaultFormState : { ...project });
+    reset((routeParams.uid == "new") ? defaultFormState : { ...project });
   }, [project, reset]);
 
   if (_.isEmpty(form)) {

@@ -8,6 +8,7 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
+import Autocomplete from '@mui/material/Autocomplete';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect } from 'react';
 import diff from 'object-diff';
@@ -23,6 +24,7 @@ const defaultFormState = {
 	name: '',
 	entity: '',
 	step_asset_type: [],
+	short_name: '',
 };
 
 
@@ -41,6 +43,7 @@ function union(a, b) {
 function UtilStepDialog(props) {
 	const dispatch = useDispatch();
 	const stepDialog = useSelector(({ utilStepApp }) => utilStepApp.utilSteps.stepDialog);
+	const entityTypes = ["Asset", "Shot", "Sequence"]
 
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
 
@@ -150,14 +153,17 @@ function UtilStepDialog(props) {
 						</div>
 
 						<div className="flex">
-							<TextField
+							<Autocomplete
 								className="mb-24"
-								label="Entity"
-								id="entity"
-								name="entity"
-								value={form.entity}
-								onChange={handleChange}
-								variant="outlined"
+								value={form?.entity}
+								onChange={(event, newValue) => {
+									setInForm("entity", newValue)
+								}}
+								disableClearable
+								id="entityType"
+								options={entityTypes}
+								renderInput={(params) => <TextField {...params} label="Entity" required variant="outlined" />}
+								required
 								fullWidth
 							/>
 						</div>
@@ -197,7 +203,7 @@ function UtilStepDialog(props) {
 					</IconButton>
 				</DialogActions>
 			</form>
-		</Dialog>
+		</Dialog >
 	);
 }
 

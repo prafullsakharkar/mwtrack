@@ -44,8 +44,8 @@ import ActivityTimelineItem from './ActivityTimelineItem';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import NewNote from './note/NewNote';
-import SingleLineImageList from '@/components/core/image/SingleLineImageList';
-import { getNotes, selectNotes } from 'src/app/entities/notes/store/notesSlice';
+import SingleLineImageList from '@/components/core/Image/SingleLineImageList';
+import { getNotes, selectNotes } from 'src/app/entities/notes/store/noteSlice';
 import { getActivities, selectActivities } from 'src/app/tools/activities/store/activitiesSlice';
 import NoteCard from './note/NoteCard';
 

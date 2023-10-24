@@ -78,7 +78,6 @@ function ProjectList(props) {
 											<ImageListItem key={item.code} className="p-4 cursor-pointer">
 												<img
 													src={item.thumbnail}
-													alt={item.code}
 													className="max-w-300 max-h-160 rounded-16"
 													onClick={() => history.push("/entity/project/" + item.uid + "/overview")}
 													srcSet={item.thumbnail}

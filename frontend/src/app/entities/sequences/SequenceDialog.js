@@ -1,5 +1,4 @@
 import { useForm } from '@/hooks';
-import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -13,13 +12,11 @@ import Slider from '@mui/material/Slider';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { useDeepCompareEffect } from '@/hooks';
 import { useParams } from 'react-router-dom';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
-import _ from '@lodash';
+import _ from '@/lodash';
 import diff from 'object-diff';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -31,11 +28,11 @@ import {
 	closeCsvCreateDialog,
 	closeCsvUpdateDialog,
 	updateMultipleSequences,
-} from './store/sequencesSlice';
-import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
+} from './store/sequenceSlice';
+// import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_sequence.csv';
 import SampleUpdateCsv from './sample/sample_update_sequence.csv';
-import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodeSlice';
 
 const defaultFormState = {
 	name: '',
@@ -54,7 +51,7 @@ function SequenceDialog(props) {
 
 	const { form, handleChange, setForm, setInForm, resetForm } = useForm(defaultFormState);
 
-	const projects = useSelector(({ fuse }) => fuse.projects.entities)
+	const projects = useSelector(({ core }) => core.projects.entities)
 	const project = routeParams?.uid?.split(':')[0].toLowerCase()
 	const is_episodic = projects && projects[project]?.is_episodic
 
@@ -275,7 +272,7 @@ function SequenceDialog(props) {
 							<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateSequence.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvCreate} />
+							{/* <AtomUploadXls validate={validateCsvCreate} /> */}
 						</>
 					)}
 					{sequenceDialog.type === 'csvUpdate' && (
@@ -283,7 +280,7 @@ function SequenceDialog(props) {
 							<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateSequence.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvUpdate} />
+							{/* <AtomUploadXls validate={validateCsvUpdate} /> */}
 						</>
 					)}
 					{sequenceDialog.type === 'edit' && (

@@ -52,7 +52,6 @@ function EntityTable(props) {
                 manualFiltering
                 manualPagination
                 manualSorting
-                initialState={{ density: 'compact' }}
                 muiTableContainerProps={{ sx: { maxHeight: (document.documentElement.offsetHeight - 250) } }}
                 displayColumnDefOptions={{
                     'mrt-row-actions': {

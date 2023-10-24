@@ -1,5 +1,4 @@
 import { useForm } from '@/hooks';
-import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -10,7 +9,6 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import { useParams } from 'react-router-dom';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
@@ -18,7 +16,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import React, { useCallback, useEffect, useState } from 'react';
-import _ from '@lodash';
+import _ from '@/lodash';
 import diff from 'object-diff';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -30,8 +28,8 @@ import {
 	closeCsvCreateDialog,
 	closeCsvUpdateDialog,
 	updateMultipleEpisodes,
-} from './store/episodesSlice';
-import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
+} from './store/episodeSlice';
+// import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_episode.csv';
 import SampleUpdateCsv from './sample/sample_update_episode.csv';
 
@@ -258,7 +256,7 @@ function EpisodeDialog(props) {
 							<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateEpisode.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvCreate} />
+							{/* <AtomUploadXls validate={validateCsvCreate} /> */}
 						</>
 					)}
 					{episodeDialog.type === 'csvUpdate' && (
@@ -266,7 +264,7 @@ function EpisodeDialog(props) {
 							<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateEpisode.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvUpdate} />
+							{/* <AtomUploadXls validate={validateCsvUpdate} /> */}
 						</>
 					)}
 					{episodeDialog.type === 'edit' && (

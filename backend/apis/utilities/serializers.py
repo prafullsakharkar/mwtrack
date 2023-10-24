@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from .models import Status, UtilStep
+from .models import FileUpload, Status, UtilStep
 
 
 class StatusSerializer(ModelSerializer):
@@ -12,4 +12,10 @@ class StatusSerializer(ModelSerializer):
 class UtilStepSerializer(ModelSerializer):
     class Meta:
         model = UtilStep
+        fields = "__all__"
+
+
+class FileUploadSerializer(ModelSerializer):
+    class Meta:
+        model = FileUpload
         fields = "__all__"

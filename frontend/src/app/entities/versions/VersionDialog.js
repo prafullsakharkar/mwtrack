@@ -14,25 +14,24 @@ import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
 import diff from 'object-diff';
 import axios from 'axios';
-import _ from '@lodash';
+import _ from '@/lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	removeVersion,
 	updateVersion,
 	addVersion,
 	updateMultipleVersions,
 	closeNewVersionDialog,
 	closeEditVersionDialog,
 	closeMultipleVersionDialog,
-} from './store/versionsSlice';
+} from './store/versionSlice';
 
-import { getAsset } from 'src/app/entities/assets/store/assetsSlice';
-import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
-import { getShots } from 'src/app/entities/shots/store/shotsSlice';
-import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
+import { getAssets } from 'src/app/entities/assets/store/assetSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodeSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequenceSlice';
+import { getShots } from 'src/app/entities/shots/store/shotSlice';
+import { getUtilSteps } from 'src/app/utilities/util-steps/store/utilStepSlice';
 
-import ImageUpload from '@/components/core/upload/ImageUpload';
+import ImageUpload from '@/components/core/Upload/ImageUpload';
 
 const defaultFormState = {
 	status: null,
@@ -60,7 +59,8 @@ function VersionDialog(props) {
 	const [entities, setEntities] = useState([])
 	const [entityType, setEntityType] = useState(null)
 	const entityTypes = ["Asset", "Shot", "Sequence"]
-	const projects = useSelector(({ fuse }) => fuse.projects.entities)
+	const projects = useSelector(({ core }) => core.projects.entities)
+	const user = useSelector(({ user }) => user.id)
 	const project = routeParams?.uid?.split(':')[0].toLowerCase()
 	const is_episodic = projects && projects[project]?.is_episodic
 
@@ -74,6 +74,7 @@ function VersionDialog(props) {
 		setFiles([])
 		if (versionDialog.type === 'edit' && versionDialog.data) {
 			setForm({ ...versionDialog.data });
+			setInForm('updated_by', user)
 		}
 
 		if (versionDialog.type === 'new') {
@@ -82,7 +83,8 @@ function VersionDialog(props) {
 				...versionDialog.data,
 			});
 			setInForm('project', project)
-
+			setInForm('created_by', user)
+			setInForm('updated_by', user)
 		}
 	}, [versionDialog.data, versionDialog.type, setForm]);
 
@@ -100,7 +102,7 @@ function VersionDialog(props) {
 
 			if (versionDialog.data && versionDialog.data.media_files && versionDialog.data.media_files.length > 0) {
 
-				const response = await axios.get('/api/v1/upload/file/', {
+				const response = await axios.get('/api/v1/utility/uploadfiles/', {
 					params: { id__in: versionDialog.data.media_files.join(',') }
 				});
 				const data = await response.data;
@@ -143,7 +145,7 @@ function VersionDialog(props) {
 				uid: project,
 				entity: 'project'
 			}
-			dispatch(getAsset(params));
+			dispatch(getAssets(params));
 		}
 	}, [assetType]);
 
@@ -168,7 +170,7 @@ function VersionDialog(props) {
 		setInForm('step', stepId)
 
 		try {
-			const response = await axios.get('/api/v1/entity/step/' + stepId + '/versions/');
+			const response = await axios.get('/api/v1/entity/steps/' + stepId + '/versions/');
 			const data = await response.data;
 
 			const sorted = data.sort((a, b) => (b.version_number - a.version_number))

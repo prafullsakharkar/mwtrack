@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import shots from './shotsSlice';
-import episodes from 'src/app/entities/episodes/store/episodesSlice';
-import sequences from 'src/app/entities/sequences/store/sequencesSlice';
-import utilsteps from 'src/app/utilities/steps/store/stepsSlice';
+import shots from './shotSlice';
+import episodes from 'src/app/entities/episodes/store/episodeSlice';
+import sequences from 'src/app/entities/sequences/store/sequenceSlice';
+import utilsteps from 'src/app/utilities/util-steps/store/utilStepSlice';
 import users from 'src/app/accounts/users/store/userSlice';
 
 const reducer = combineReducers({

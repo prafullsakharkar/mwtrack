@@ -1,5 +1,5 @@
 import { useForm } from '@/hooks';
-import Scrollbars from '@/components/core/Scrollbars';
+import CustomScrollbars from '@/components/core/CustomScrollbars';
 import Tooltip from '@mui/material/Tooltip';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
@@ -10,17 +10,11 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import Fab from '@mui/material/Fab';
-import TextField from '@mui/material/TextField';
 import { useParams } from 'react-router-dom';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import React, { useCallback, useEffect, useState } from 'react';
-import _ from '@lodash';
+import _ from '@/lodash';
 import clsx from 'clsx';
 import diff from 'object-diff';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,8 +29,8 @@ import {
 	closeCsvCreateDialog,
 	closeCsvUpdateDialog,
 	updateMultipleNotes,
-} from './store/notesSlice';
-import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
+} from './store/noteSlice';
+import XLSUpload from '@/components/core/Upload/XLSUpload';
 import SampleCreateCsv from './sample/sample_create_note.csv';
 import SampleUpdateCsv from './sample/sample_update_note.csv';
 
@@ -154,6 +148,7 @@ function NoteDialog(props) {
 	const initDialog = useCallback(() => {
 		if (['edit', 'editReply'].includes(noteDialog.type) && noteDialog.data) {
 			setForm({ ...noteDialog.data });
+			setInForm('updated_by', user)
 		}
 
 		if (noteDialog.type === 'new') {
@@ -163,6 +158,8 @@ function NoteDialog(props) {
 				...noteDialog.data,
 			});
 			setInForm('project', project)
+			setInForm('created_by', user)
+			setInForm('updated_by', user)
 
 		}
 	}, [noteDialog.data, noteDialog.type, setForm]);
@@ -259,7 +256,7 @@ function NoteDialog(props) {
 							<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateNote.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvCreate} />
+							<XLSUpload validate={validateCsvCreate} />
 						</>
 					)}
 					{noteDialog.type === 'csvUpdate' && (
@@ -267,7 +264,7 @@ function NoteDialog(props) {
 							<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateNote.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvUpdate} />
+							<XLSUpload validate={validateCsvUpdate} />
 						</>
 					)}
 					{['new', 'edit', 'editReply'].includes(noteDialog.type) && (
@@ -298,7 +295,7 @@ function NoteDialog(props) {
 							</Tooltip>
 						</div>
 						<div className="flex flex-col w-full">
-							<Scrollbars className="flex flex-auto w-full max-h-640">
+							<CustomScrollbars className="flex flex-auto w-full max-h-640">
 								<div className="w-full">
 									{form.preview && form.preview !== '' && (
 										<div className="relative">
@@ -340,7 +337,7 @@ function NoteDialog(props) {
 									)}
 
 								</div>
-							</Scrollbars>
+							</CustomScrollbars>
 						</div>
 					</>)}
 

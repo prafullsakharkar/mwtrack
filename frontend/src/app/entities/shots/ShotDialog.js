@@ -1,5 +1,4 @@
 import { useForm } from '@/hooks';
-import Utils from '@fuse/utils/Utils';
 import AppBar from '@mui/material/AppBar';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -14,12 +13,11 @@ import Slider from '@mui/material/Slider';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import { useParams } from 'react-router-dom';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useCallback, useEffect, useState } from 'react';
 import diff from 'object-diff';
-import _ from '@lodash';
+import _ from '@/lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	updateShot,
@@ -30,11 +28,11 @@ import {
 	closeCsvUpdateDialog,
 	closeMultipleShotDialog,
 	updateMultipleShots,
-} from './store/shotsSlice';
+} from './store/shotSlice';
 
-import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
-import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodeSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequenceSlice';
+// import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_shot.csv';
 import SampleUpdateCsv from './sample/sample_update_shot.csv';
 
@@ -58,7 +56,7 @@ function ShotDialog(props) {
 	const { form, handleChange, setForm, setInForm, resetForm } = useForm(defaultFormState);
 
 	const frames = _.range(101, 3000, 1).map(item => item.toString())
-	const projects = useSelector(({ fuse }) => fuse.projects.entities)
+	const projects = useSelector(({ core }) => core.projects.entities)
 	const project = routeParams?.uid?.split(':')[0].toLowerCase()
 	const is_episodic = projects && projects[project]?.is_episodic
 	const start_frame = projects && projects[project]?.start_frame
@@ -311,7 +309,7 @@ function ShotDialog(props) {
 							<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateShot.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvCreate} />
+							{/* <AtomUploadXls validate={validateCsvCreate} /> */}
 						</>
 					)}
 					{shotDialog.type === 'csvUpdate' && (
@@ -319,7 +317,7 @@ function ShotDialog(props) {
 							<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateShot.csv">
 								Download Sample CSV
 							</a>
-							<AtomUploadXls validate={validateCsvUpdate} />
+							{/* <AtomUploadXls validate={validateCsvUpdate} /> */}
 						</>
 					)}
 					{shotDialog.type === 'edit' && (

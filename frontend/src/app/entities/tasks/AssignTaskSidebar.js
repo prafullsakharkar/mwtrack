@@ -1,46 +1,20 @@
-import NavLinkAdapter from '@/components/core/NavLinkAdapter';
 import Divider from '@mui/material/Divider';
-import Icon from '@mui/material/Icon';
 import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import { useParams } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
-import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAssignTasks } from './store/tasksSlice';
-import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
-import { getShots } from 'src/app/entities/shots/store/shotsSlice';
-import { getAsset } from 'src/app/entities/assets/store/assetsSlice';
-import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
-
-const useStyles = makeStyles(theme => ({
-	listItem: {
-		color: 'inherit!important',
-		textDecoration: 'none!important',
-		height: 40,
-		width: 'calc(100% - 16px)',
-		borderRadius: '0 20px 20px 0',
-		paddingLeft: 24,
-		paddingRight: 12,
-		'&.active': {
-			backgroundColor: theme.palette.secondary.main,
-			color: `${theme.palette.secondary.contrastText}!important`,
-			pointerEvents: 'none',
-			'& .list-item-icon': {
-				color: 'inherit'
-			}
-		},
-		'& .list-item-icon': {
-			marginRight: 16
-		}
-	}
-}));
+import { getAssignTasks } from './store/taskSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodeSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequenceSlice';
+import { getShots } from 'src/app/entities/shots/store/shotSlice';
+import { getAsset } from 'src/app/entities/assets/store/assetSlice';
+import { getUtilSteps } from 'src/app/utilities/util-steps/store/utilStepSlice';
 
 function AssignTaskSidebar(props) {
 	const dispatch = useDispatch();

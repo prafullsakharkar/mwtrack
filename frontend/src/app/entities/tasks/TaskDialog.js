@@ -18,10 +18,11 @@ import TextField from '@mui/material/TextField';
 import { useParams } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { showMessage } from '@/stores/core/messageSlice';
 import React, { useCallback, useEffect, useState } from 'react';
 import diff from 'object-diff';
 import clsx from 'clsx';
-import _ from '@lodash';
+import _ from '@/lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	updateTask,
@@ -31,34 +32,32 @@ import {
 	closeCsvCreateDialog,
 	closeCsvUpdateDialog,
 	updateMultipleTasks,
-} from './store/tasksSlice';
+} from './store/taskSlice';
 
-import { getEpisodes } from 'src/app/entities/episodes/store/episodesSlice';
-import { getSequences } from 'src/app/entities/sequences/store/sequencesSlice';
-import { getShots } from 'src/app/entities/shots/store/shotsSlice';
-import { getSteps } from 'src/app/entities/steps/store/stepsSlice';
-import { getAsset } from 'src/app/entities/assets/store/assetsSlice';
+import { getEpisodes } from 'src/app/entities/episodes/store/episodeSlice';
+import { getSequences } from 'src/app/entities/sequences/store/sequenceSlice';
+import { getShots } from 'src/app/entities/shots/store/shotSlice';
+import { getAssets } from 'src/app/entities/assets/store/assetSlice';
 
-import { getTaskUsers } from './store/tasksSlice';
-import { getUtilSteps } from 'src/app/utilities/steps/store/stepsSlice';
+import { getTaskUsers } from './store/taskSlice';
+import { getUtilSteps } from 'src/app/utilities/util-steps/store/utilStepSlice';
 
-import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
+// import AtomUploadXls from '@/components/core/xls_table/AtomUploadXls';
 import SampleCreateCsv from './sample/sample_create_task.csv';
 import SampleUpdateCsv from './sample/sample_update_task.csv';
 
 const defaultFormState = {
 	name: '',
-	bid_days: 0,
 	status: null,
-	priority: null,
+	priority: 'low',
 	reviewer: null,
-	// version_number: 0,
-	// project: "",
-	asset: "",
-	episode: "",
-	sequence: "",
-	shot: "",
-	step: "",
+	version_number: 1,
+	project: null,
+	asset: null,
+	episode: null,
+	sequence: null,
+	shot: null,
+	step: null,
 	task_users: [],
 };
 
@@ -73,7 +72,6 @@ function TaskDialog(props) {
 
 	const users = props.users;
 	const statuses = props.statuses;
-	const priorities = props.priorities;
 
 	const episodeIds = props.episodeIds;
 	const sequenceIds = props.sequenceIds;
@@ -83,6 +81,7 @@ function TaskDialog(props) {
 
 	const [parent, setParent] = useState(null)
 	const [entities, setEntities] = useState([])
+	const priorities = ["low", "medium", "high"];
 
 	const exclude_status = ['Ready To Start', 'In Progress']
 
@@ -91,10 +90,10 @@ function TaskDialog(props) {
 	const bids = _.range(1, 20, 0.25).map(item => item.toString())
 	const [entityType, setEntityType] = useState(null)
 	const entityTypes = ["Asset", "Shot", "Sequence"]
-	const projects = useSelector(({ fuse }) => fuse.projects.entities)
+	const projects = useSelector(({ core }) => core.projects.entities)
 	const project = routeParams?.uid?.split(':')[0].toLowerCase()
 	const is_episodic = projects && projects[project]?.is_episodic
-
+	const default_status = statuses ? _.find(statuses, { name: "Ready To Start" }) : null
 	const [assetType, setAssetType] = useState(null)
 	const assetTypes = ["Set", "Prop", "Character", "Vehicle", "Fx"]
 	const { form, handleChange, setForm, setInForm, resetForm } = useForm(defaultFormState);
@@ -103,117 +102,9 @@ function TaskDialog(props) {
 	const [selectedUserId, setSelectedUserId] = useState(null)
 	const [csvData, setCsvData] = useState([])
 
-	function validateCsvCreate(csvData) {
-
-		const validList = []
-		const valiData = csvData.map(item => {
-			const requestData = { ...item }
-			item.reason = "Valid"
-			item.valid = true
-			const reviewer = item.reviewer && users ? _.find(users, { username: item.reviewer }) : null
-			if (item.reviewer && !reviewer) {
-				item.reason = "Invalid Reviewer"
-				item.valid = false
-			} else if (item.reviewer) {
-				requestData.reviewer = reviewer.id
-			}
-
-			const priority = item.priority && priorities ? _.find(priorities, { name: item.priority }) : null
-			if (item.priority && !priority) {
-				item.reason = "Invalid Priority"
-				item.valid = false
-			} else if (item.priority) {
-				requestData.priority = priority.id
-			}
-
-			if (item.assignees) {
-				const assignees = item.assignees.split(",")
-				requestData.task_users = assignees.map(row => {
-					const data = row.split("|")
-					const user = users ? _.find(users, { username: data[0] }).id : null
-					const value = { "user": user, "bid_days": data[1] || 0 }
-					return value
-				})
-			}
-			if (item.valid) {
-				validList.push(requestData)
-			}
-			return item
-		})
-
-		const data = validList.map(item => {
-			const changedValues = diff(defaultFormState, item) // remove blank entries
-			return changedValues
-		})
-
-		setCsvData(data)
-		return valiData
-
-	}
-
-	function validateCsvUpdate(csvData) {
-
-		const validList = []
-		const valiData = csvData.map(item => {
-			const requestData = { ...item }
-			item.reason = "Valid"
-			item.valid = true
-			if (taskIds && !taskIds.includes(item.uid)) {
-				item.reason = "Task Not Exists"
-				item.valid = false
-			}
-			const reviewer = item.reviewer && users ? _.find(users, { username: item.reviewer }) : null
-			if (item.reviewer && !reviewer) {
-				item.reason = "Invalid Reviewer"
-				item.valid = false
-			} else if (item.reviewer) {
-				requestData.reviewer = reviewer.id
-			}
-
-			const status = item.status && statuses ? _.find(statuses, { name: item.status }) : null
-			if (item.status && !status) {
-				item.reason = "Invalid Status"
-				item.valid = false
-			} else if (item.status) {
-				requestData.status = status.id
-			}
-
-			const priority = item.priority && priorities ? _.find(priorities, { name: item.priority }) : null
-			if (item.priority && !priority) {
-				item.reason = "Invalid Priority"
-				item.valid = false
-			} else if (item.priority) {
-				requestData.priority = priority.id
-			}
-
-			if (item.assignees) {
-				const assignees = item.assignees.split(",")
-				requestData.task_users = assignees.map(row => {
-					const data = row.split("|")
-					const user = users ? _.find(users, { username: data[0] }).id : null
-					const value = { "user": user, "bid_days": data[1] || 0, "task": item.uid }
-					return value
-				})
-			}
-			if (item.valid) {
-				validList.push(requestData)
-			}
-			return item
-		})
-
-		const data = validList.map(item => {
-			const changedValues = diff(defaultFormState, item) // remove blank entries
-			return changedValues
-		})
-
-		setCsvData(data)
-		return valiData
-
-	}
-
-	function checkTaskExists(taskId) {
-		const url = '/api/v1/entity/task/' + taskId + '/'
-		return axios.get(url)
+	async function checkTaskExists(taskId) {
+		const url = '/api/v1/entity/tasks/' + taskId + '/'
+		return await axios.get(url)
 			.then(response => {
 				if (response.status === 200) {
 					return true;
@@ -242,6 +133,7 @@ function TaskDialog(props) {
 				...taskDialog.data,
 			});
 			setInForm('project', project)
+			setInForm('status', default_status?.id)
 
 		}
 	}, [taskDialog.data, taskDialog.type, setForm]);
@@ -258,17 +150,17 @@ function TaskDialog(props) {
 	const handleUserAdd = () => {
 		const newUser = {
 			user: selectedUserId,
-			bid_days: parseFloat(selectedBid),
-			task: form.uid,
+			bid: parseInt(parseFloat(selectedBid) * 8 * 60),
+			step: form.step,
+			task: form.step + ':' + form.name,
+			project: form.project,
+			status: default_status?.id,
 		}
 		let task_users = form.task_users.filter((item) => item.user !== selectedUserId)
 
 		task_users = [...task_users, { ...newUser }]
 
-		const bid_days = task_users.reduce((prev, cur) => prev + parseFloat(cur.bid_days), 0)
-
 		setInForm(`task_users`, task_users);
-		setInForm(`bid_days`, parseFloat(bid_days));
 		setSelectedUserId(null);
 		setSelectedBid(null);
 	}
@@ -276,7 +168,6 @@ function TaskDialog(props) {
 	const handleUserRemove = (value) => {
 		const task_users = form.task_users.filter(data => value.user !== data.user)
 		setInForm(`task_users`, task_users);
-		setInForm(`bid_days`, parseFloat(form.bid_days) - parseFloat(value.bid_days));
 		const remove_users = form.remove_users ? form.remove_users : []
 		value.id && setInForm(`remove_users`, [...remove_users, value.id]);
 	}
@@ -303,6 +194,9 @@ function TaskDialog(props) {
 	}, [entityType, is_episodic])
 
 	useEffect(() => {
+		resetForm()
+		setInForm('project', project)
+		setInForm('status', default_status?.id)
 		{/* Get Util Steps from entity Type like 'Asset' or 'shot' */ }
 		const params = {
 			entity: entityType
@@ -317,7 +211,7 @@ function TaskDialog(props) {
 				uid: project,
 				entity: "project"
 			}
-			dispatch(getAsset(params));
+			dispatch(getAssets(params));
 		}
 	}, [assetType]);
 
@@ -344,12 +238,14 @@ function TaskDialog(props) {
 
 		let sorted = []
 		try {
-			const response = await axios.get('/api/v1/entity/step/' + stepId + '/tasks/');
+			const response = await axios.get('/api/v1/entity/steps/' + stepId + '/tasks/');
 			const data = await response.data;
 
 			sorted = data.sort((a, b) => (b.version_number - a.version_number))
 		} catch {
 			console.log("Step Not found ...")
+			dispatch(showMessage({ message: 'Step (' + stepId + ') not found, please create step first !', variant: "error" }));
+			return
 		}
 		let latestTask = 'Task_v1'
 		if (sorted.length > 0) {
@@ -417,7 +313,7 @@ function TaskDialog(props) {
 				checkTaskExists(changedValues.id).then(exists => {
 					if (exists) {
 						console.info("URL exists", changedValues.id);
-						dispatch(updateTask(changedValues));
+						dispatch(updateMultipleTasks({ multipleTaskList: changedValues, project }));
 					} else {
 						console.info("URL does not exist", changedValues.id);
 						changedValues.step = taskEntities[changedValues.id].step
@@ -440,7 +336,7 @@ function TaskDialog(props) {
 			checkTaskExists(changedValues.id).then(exists => {
 				if (exists) {
 					console.info("URL exists");
-					dispatch(updateTask(changedValues));
+					dispatch(updateMultipleTasks({ multipleTaskList: changedValues, project }));
 				} else {
 					console.info("URL does not exist");
 					delete form.uid
@@ -482,7 +378,7 @@ function TaskDialog(props) {
 								<a variant="contained" color="secondary" href={SampleCreateCsv} download="SampleCreateTask.csv">
 									Download Sample CSV
 								</a>
-								<AtomUploadXls validate={validateCsvCreate} />
+								{/* <AtomUploadXls validate={validateCsvCreate} /> */}
 							</>
 						)}
 						{taskDialog.type === 'csvUpdate' && (
@@ -490,7 +386,7 @@ function TaskDialog(props) {
 								<a variant="contained" color="secondary" href={SampleUpdateCsv} download="SampleUpdateTask.csv">
 									Download Sample CSV
 								</a>
-								<AtomUploadXls validate={validateCsvUpdate} />
+								{/* <AtomUploadXls validate={validateCsvUpdate} /> */}
 							</>
 						)}
 						{taskDialog.type === 'new' && (
@@ -593,20 +489,22 @@ function TaskDialog(props) {
 											/>
 										</div>
 									</div>
-									<div className="flex">
-										<TextField
-											className="mb-8"
-											label="Name"
-											autoFocus
-											id="name"
-											name="name"
-											value={form.name}
-											onChange={handleChange}
-											variant="outlined"
-											required
-											fullWidth
-											disabled
-										/>
+									<div className="flex flex-row mb-8">
+										<div className="mr-5 flex-1">
+											<TextField
+												className="mb-8"
+												label="Name"
+												autoFocus
+												id="name"
+												name="name"
+												value={form.name}
+												onChange={handleChange}
+												variant="outlined"
+												required
+												fullWidth
+												disabled
+											/>
+										</div>
 									</div>
 								</>)}
 							</>
@@ -635,7 +533,7 @@ function TaskDialog(props) {
 											// disabled={!(form.parent && form.parent.uid && form.name)} 
 											id="users"
 											options={Object.values(users)}
-											getOptionLabel={option => option.username}
+											getOptionLabel={option => option.email}
 											// style={{ width: 200 }}
 											renderInput={(params) => <TextField {...params} label="Assignee" required variant="outlined" />}
 										/>
@@ -656,7 +554,7 @@ function TaskDialog(props) {
 											renderInput={(params) => <TextField {...params} label="Bid" required variant="outlined" />}
 										/>
 									</div>
-									<div className="flex flex-col" >
+									<div className="flex flex-col items-center justify-center" >
 										<span title={"Click To Add New "} >
 											<IconButton onClick={handleUserAdd} disabled={!selectedBid || !selectedUserId}>
 												<Icon>add_circle_outline</Icon>
@@ -672,7 +570,7 @@ function TaskDialog(props) {
 													<Avatar src={users[item.user] && users[item.user].avatar}>
 													</Avatar>
 												</ListItemAvatar>
-												<ListItemText primary={users[item.user] && users[item.user].username} secondary={item.bid_days} />
+												<ListItemText primary={users[item.user] && users[item.user].username} secondary={item.bid / (8 * 60)} />
 												<Button size="small" variant="outlined" color="secondary">
 													{item.status?.name || 'Ready To Start'}
 												</Button>
@@ -689,41 +587,7 @@ function TaskDialog(props) {
 										</div>
 									))}
 								</div>
-								<div className="flex mb-8">
-									<div className="mr-5 flex-1">
 
-										<TextField
-											className="mb-8"
-											label="Bid (in days)"
-											autoFocus
-											id="bid_days"
-											name="bid_days"
-											value={form.bid_days}
-											// onChange={handleChange}
-											variant="outlined"
-											required
-											fullWidth
-											disabled
-										/>
-
-									</div>
-									<div className="flex-1">
-
-										<Autocomplete
-											value={form.reviewer && users[form.reviewer?.id || form.reviewer]}
-											onChange={(event, newValue) => {
-												setInForm('reviewer', newValue.id)
-											}}
-											disableClearable
-											getOptionLabel={option => option.username}
-											id="reviewer"
-											options={Object.values(users)}
-											renderInput={(params) => <TextField {...params} label="Reviewer" required variant="outlined" />}
-
-										/>
-
-									</div>
-								</div>
 								<div className="flex mb-8">
 									{taskDialog.type != 'new' && (<div className="mr-5 flex-1">
 										<Autocomplete
@@ -741,18 +605,31 @@ function TaskDialog(props) {
 									</div>)}
 									<div className="flex-1">
 										<Autocomplete
-											value={form.priority && priorities[form.priority?.id || form.priority]}
+											value={form?.priority}
 											onChange={(event, newValue) => {
-												setInForm('priority', newValue.id)
+												setInForm('priority', newValue)
 											}}
 											disableClearable
-											getOptionLabel={option => option.name}
 											id="priority"
-											options={Object.values(priorities)}
+											options={priorities}
 											renderInput={(params) => <TextField {...params} label="Priority" required variant="outlined" />}
 
 										/>
 									</div>
+
+								</div>
+								<div className="flex-1">
+									<Autocomplete
+										value={form.reviewer && users[form.reviewer?.id || form.reviewer]}
+										onChange={(event, newValue) => {
+											setInForm('reviewer', newValue.id)
+										}}
+										disableClearable
+										getOptionLabel={option => option.email}
+										id="reviewer"
+										options={Object.values(users)}
+										renderInput={(params) => <TextField {...params} label="Reviewer" required variant="outlined" />}
+									/>
 								</div>
 							</>
 						)}

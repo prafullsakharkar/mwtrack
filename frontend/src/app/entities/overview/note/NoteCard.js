@@ -23,7 +23,7 @@ import format from 'date-fns/format';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import NewNote from './NewNote';
-import { openEditNoteDialog, openEditReplyDialog } from 'src/app/entities/notes/store/notesSlice';
+import { openEditNoteDialog, openEditReplyDialog } from 'src/app/entities/notes/store/noteSlice';
 
 function NoteCard(props) {
   const dispatch = useDispatch();
