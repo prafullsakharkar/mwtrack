@@ -6,7 +6,7 @@ const authRoles = {
   owner: ['admin', 'owner'],
   production: ['admin', 'owner', 'production'],
   supervisor: ['admin', 'owner', 'production', 'supervisor'],
-  artist: ['admin', 'owner', 'production', 'supervisor', 'artost'],
+  artist: ['admin', 'owner', 'production', 'supervisor', 'artist'],
   onlyGuest: [],
 };
 
