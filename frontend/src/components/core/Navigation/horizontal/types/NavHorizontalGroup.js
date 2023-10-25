@@ -1,6 +1,6 @@
 import NavLinkAdapter from '@/components/core/NavLinkAdapter';
 import { styled, useTheme } from '@mui/material/styles';
-import { useDebounce } from '@/hooks/index';
+import { useDebounce } from '@/hooks';
 import Grow from '@mui/material/Grow';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';

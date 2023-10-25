@@ -1,7 +1,7 @@
 import List from '@mui/material/List';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import clsx from 'clsx';
-import NavItem from '../NavItem';
+import NavVerticalTab from './types/NavVerticalTab';
 
 const StyledList = styled(List)(({ theme }) => ({
   '& .core-list-item': {
@@ -13,47 +13,51 @@ const StyledList = styled(List)(({ theme }) => ({
       backgroundColor:
         theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0,0,0,.05)',
     },
-    padding: '8px 12px 8px 12px',
-    height: 40,
-    minHeight: 40,
-    '&.level-0': {
-      minHeight: 44,
-      minminHeight: 44,
-    },
-    '& .core-list-item-text': {
-      padding: '0 0 0 8px',
-    },
+  },
+  '& .core-list-item-text-primary': {
+    lineHeight: '1',
   },
   '&.active-square-list': {
-    '& .core-list-item': {
+    '& .core-list-item, & .active.core-list-item': {
+      width: '100%',
       borderRadius: '0',
     },
   },
+  '&.dense': {},
 }));
 
-function NavHorizontalLayout1(props) {
-  const { navigation, layout, active, dense, className } = props;
+function NavVerticalLayout2(props) {
+  const { navigation, layout, active, dense, className, onItemClick, firstLevel, selectedId } =
+    props;
+  const theme = useTheme();
+
+  function handleItemClick(item) {
+    onItemClick?.(item);
+  }
 
   return (
     <StyledList
       className={clsx(
-        'navigation whitespace-nowrap flex p-0',
+        'navigation whitespace-nowrap items-center flex flex-col',
         `active-${active}-list`,
         dense && 'dense',
-        className,
+        className
       )}
     >
       {navigation.map((_item) => (
-        <NavItem
+        <NavVerticalTab
           key={_item.id}
-          type={`horizontal-${_item.type}`}
+          type={`vertical-${_item.type}`}
           item={_item}
           nestedLevel={0}
+          onItemClick={handleItemClick}
+          firstLevel={firstLevel}
           dense={dense}
+          selectedId={selectedId}
         />
       ))}
     </StyledList>
   );
 }
 
-export default NavHorizontalLayout1;
+export default NavVerticalLayout2;

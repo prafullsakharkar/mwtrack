@@ -5,7 +5,7 @@ import { memo } from 'react';
 import UserNavbarHeader from '@/components/layout/UserNavbarHeader';
 import NavbarToggleButton from '@/components/layout/NavbarToggleButton';
 import Logo from '@/components/layout/Logo';
-import Navigation from '@/components/layout/CustomNavigation';
+import CustomNavigation from '@/components/layout/CustomNavigation';
 
 const Root = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -48,7 +48,7 @@ function NavbarMobileLayout(props) {
       >
         <UserNavbarHeader />
 
-        <Navigation layout="vertical" />
+        <CustomNavigation layout="vertical" />
 
         <div className="flex flex-0 items-center justify-center py-48 opacity-10">
           <Logo />
