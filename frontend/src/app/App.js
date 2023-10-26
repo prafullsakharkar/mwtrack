@@ -19,7 +19,7 @@ import axios from 'axios';
  */
 axios.defaults.baseURL = `${process.env.REACT_APP_API_HOST}`;
 axios.defaults.withCredentials = true
-// axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const emotionCache = {
